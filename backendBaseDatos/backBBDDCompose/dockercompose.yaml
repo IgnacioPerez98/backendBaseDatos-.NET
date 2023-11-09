@@ -1,0 +1,31 @@
+﻿#para correrlo:
+#  En la carpeta raiz ejecuto : docker build -t proyectobbddback .
+#  En la carpeta dockercomposeconfig: docker compose up -d
+
+
+version: '3.8'
+services:
+  mysql:
+    container_name: "BasedeDatosMySQL"
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3606:3606"
+    environment:
+      MYSQL_ROOT_PASSWORD: proyecto
+      MYSQL_DATABASE: proyectoback
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  proyectobackend:
+    container_name: "API .NET Core 7.0"
+    image: proyectobbddback
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: sa
+      MYSQL_PASSWORD: proyecto
+      MYSQL_DATABASE: proyectoback
