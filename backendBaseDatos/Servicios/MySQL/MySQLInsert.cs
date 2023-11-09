@@ -7,7 +7,11 @@ namespace backendBaseDatos.Servicios.MySQL
     {
         public void InsertarFuncionario(Funcionarios funcionario)
         {
-            string query = @"INSERT INTO funcionarios(ci,nombre,apellido,fch_nac,direccion, telefono, email,logid) values (@_v1,@_v2,@_v3,@_v4,@_v5,@_v6,@_v7, (SELECT COALESCE(MAX(logid),0)+1 FROM funcionarios))";
+            string query = @"
+                USE proyectoback;
+                INSERT INTO logins (logid, password) VALUES ((SELECT COALESCE(MAX(logid),0)+1 FROM logins), @password);
+                INSERT INTO funcionarios(ci,nombre,apellido,fch_nac,direccion, telefono, email,logid) 
+                values (@_v1,@_v2,@_v3,@_v4,@_v5,@_v6,@_v7, (SELECT COALESCE(MAX(logid),0) FROM logins))";
             using(MySqlCommand  cmd = new MySqlCommand(query,getConection()))
             {
                 cmd.Connection.Open();
@@ -18,6 +22,7 @@ namespace backendBaseDatos.Servicios.MySQL
                 cmd.Parameters.AddWithValue("@_v5",funcionario.Direccion);
                 cmd.Parameters.AddWithValue("@_v6",funcionario.Telefono);
                 cmd.Parameters.AddWithValue("@_v7",funcionario.Email);
+                cmd.Parameters.AddWithValue("@password", SHA512Service.Encrypt(funcionario.Password));
 
                 var affROws = cmd.ExecuteNonQuery();
                 if (affROws == 0) throw new Exception("EL comando no afecto ninguna fila.");

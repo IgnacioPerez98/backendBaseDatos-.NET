@@ -1,18 +1,19 @@
 ﻿using backendBaseDatos.Models;
+using backendBaseDatos.Models.Requests;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using System.Reflection.PortableExecutable;
 
 namespace backendBaseDatos.Servicios.MySQL
 {
     public class MySQLGet : BaseMySql
     {
-        public Funcionarios? ObtenerPorID(string email)
+        public LoginRequest ObtenerPorEmail(string email)
         {
-            Funcionarios? f = null;
-            string query = @"SELECT JSON_OBJECT(
-                ) FROM funcionarios F join logins L on F.logid = L.logid
-                WHERE F.email = @email_param
-                ";
+            string query = @"SELECT F.email, L.password
+                        FROM funcionarios F join logins L on F.logid = L.logid
+                        WHERE F.email = @email_param
+                        ";
             try
             {
                 using(MySqlCommand cmd = new MySqlCommand(query,getConection()))
@@ -22,20 +23,21 @@ namespace backendBaseDatos.Servicios.MySQL
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        f = JsonConvert.DeserializeObject<Funcionarios>(reader.GetString(0));
-                    }
 
+                        return new LoginRequest
+                        {
+                            Email = reader.GetString(0),
+                            Password = reader.GetString(1),
+                        };
+                    }
                     cmd.Connection.Close();
                 }
-
             }
             catch (Exception ex )
             {
                 Console.WriteLine(ex);
             }
-
-
-            return f;
+            return null;
         } 
     }
 }

@@ -1,12 +1,13 @@
 ﻿using backendBaseDatos.Models;
 using backendBaseDatos.Servicios.MySQL;
 using backendBaseDatos.Servicios.Validaciones;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backendBaseDatos.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/funcionarios")]
     public class FuncionariosController : Controller
     {
         private readonly ILogger<FuncionariosController> _logger;
@@ -16,11 +17,15 @@ namespace backendBaseDatos.Controllers
             _logger = logger;
             DDBBInsert = mySQLInsert;
         }
-        [HttpPost]
+
+
+        [HttpPost("funcionario")]
+        [Authorize]
         public ActionResult CrearFuncionarios(Funcionarios funcionario)
         {
             try
             {
+                
                 var validate = Validador.ValidarFuncionario(funcionario);
                 if (!validate.IsOK)
                 {
@@ -36,5 +41,10 @@ namespace backendBaseDatos.Controllers
                 return StatusCode(500,ex);
             }
         }
+
+        //public Funcionarios ObtenerFuncionarioporEmail(string email)
+        //{
+
+        //}
     }
 }

@@ -74,3 +74,10 @@ CREATE TABLE IF NOT EXISTS periodos_actualizacion(
     fch_fin date not null,
     primary key (fch_inicio, fch_fin)
 );
+
+USE proyectoback;
+
+INSERT INTO logins (logid, password) VALUES (6, '91aac10dc64306f3f2be458902f3787f632b8d84428c084c7e508f827fa6a56eaf74db4354ebdbcd47682c1077846f1da03c60849c8a4cba74fb05503069e692');
+
+INSERT INTO funcionarios (ci, nombre, apellido, fch_nac, direccion, telefono, email, logid)
+VALUES ('49765166', 'Ignacio', 'Perez', '1998-04-09', 'Casucha 1234', '098110564', 'nachopp98@gmail.com', 6);

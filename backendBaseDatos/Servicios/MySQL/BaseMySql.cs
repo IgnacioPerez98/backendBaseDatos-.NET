@@ -5,16 +5,22 @@ namespace backendBaseDatos.Servicios.MySQL
     public class BaseMySql
     {
         public string Server { get; set; } = "localhost";
-        public string Port { get; set; } = "3306";
         public string Database { get; set; } = "proyectoback";
         public string Username { get; set; } = "root";
-        public string Password { get; set; } = "contrasenia";
+        public string Password { get; set; } = "proyecto";
+
+        private MySqlConnection _connection;
 
         public MySqlConnection getConection()
         {
             try
             {
-                string connectionString = $"Server={Server}:{Port};Database={Database};Uid={Username};Pwd={Password};";
+                string connectionString = $"Server={Server};Database={Database};Uid={Username};Pwd={Password};";
+                if(_connection == null)
+                {
+                    _connection = new MySqlConnection(connectionString);
+                }
+                return _connection;
 
             }
             catch (MySqlException e)
