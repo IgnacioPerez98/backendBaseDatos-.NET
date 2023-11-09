@@ -12,7 +12,7 @@ namespace backendBaseDatos
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            //JWT Auth
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -25,8 +25,10 @@ namespace backendBaseDatos
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWTService.SecretKey))
                 };
             });
+            //Swagger
             builder.Services.AddSwaggerGen(option =>
             {
+                option.EnableAnnotations();
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend Base de Datos", Version = "v1" });
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

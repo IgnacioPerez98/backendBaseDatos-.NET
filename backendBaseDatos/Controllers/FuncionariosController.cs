@@ -3,6 +3,8 @@ using backendBaseDatos.Servicios.MySQL;
 using backendBaseDatos.Servicios.Validaciones;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace backendBaseDatos.Controllers
 {
@@ -18,14 +20,16 @@ namespace backendBaseDatos.Controllers
             DDBBInsert = mySQLInsert;
         }
 
-
         [HttpPost("funcionario")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Funcionario creado con éxito")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Error en la validacion del funcionario")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Error en el token proporcionado")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
         [Authorize]
-        public ActionResult CrearFuncionarios(Funcionarios funcionario)
+        public ActionResult CrearFuncionarios([FromBody] Funcionarios funcionario)
         {
             try
-            {
-                
+            {                
                 var validate = Validador.ValidarFuncionario(funcionario);
                 if (!validate.IsOK)
                 {
@@ -41,10 +45,5 @@ namespace backendBaseDatos.Controllers
                 return StatusCode(500,ex);
             }
         }
-
-        //public Funcionarios ObtenerFuncionarioporEmail(string email)
-        //{
-
-        //}
     }
 }

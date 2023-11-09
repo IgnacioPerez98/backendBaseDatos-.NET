@@ -3,6 +3,7 @@ using backendBaseDatos.Servicios;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -13,12 +14,16 @@ namespace backendBaseDatos.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
-        public AuthController()
+        private readonly ILogger<AuthController> _logger;   
+        public AuthController(ILogger<AuthController> logger)
         {
+            _logger = logger;
         }
 
         [HttpPost("gettoken")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Retorna el token")]
+        [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Error en el token proporcionado")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
         public IActionResult GetToken([FromBody] LoginRequest model)
         {
             try

@@ -1,5 +1,5 @@
 ﻿/*Script que se ejecuta cuando se crea el contenedor de MySql*/
-/*Usuario*/
+/*Usuario para conectarse*/
 CREATE USER 'sa'@'%' IDENTIFIED WITH mysql_native_password BY 'proyecto';
 GRANT USAGE ON *.* TO 'sa'@'%';
 ALTER USER 'sa'@'%' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS periodos_actualizacion(
 
 USE proyectoback;
 
-INSERT INTO logins (logid, password) VALUES (6, '91aac10dc64306f3f2be458902f3787f632b8d84428c084c7e508f827fa6a56eaf74db4354ebdbcd47682c1077846f1da03c60849c8a4cba74fb05503069e692');
+INSERT INTO logins (logid, password) VALUES (0, '91aac10dc64306f3f2be458902f3787f632b8d84428c084c7e508f827fa6a56eaf74db4354ebdbcd47682c1077846f1da03c60849c8a4cba74fb05503069e692');
 
 INSERT INTO funcionarios (ci, nombre, apellido, fch_nac, direccion, telefono, email, logid)
-VALUES ('49765166', 'Ignacio', 'Perez', '1998-04-09', 'Casucha 1234', '098110564', 'nachopp98@gmail.com', 6);
+VALUES ('49765166', 'Ignacio', 'Perez', '1998-04-09', 'Casucha 1234', '098110564', 'nachopp98@gmail.com', 0);
