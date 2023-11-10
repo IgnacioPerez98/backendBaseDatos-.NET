@@ -33,5 +33,32 @@ namespace backendBaseDatos.Servicios.Validaciones
             //el Log id no lo valido xq es autogenerado
             return estado;
         }
+
+
+        public static ValidateStatus ValidarCanetdeSalud(Carnet_Salud carnet)
+        {
+            ValidateStatus estado = new();
+            if (carnet == null) return new(false, "Faltan los parametros.");
+            if (string.IsNullOrEmpty(carnet.Ci)) return new(false, "La CI es requerida.");
+            if (!CI_Validate.IsCIValid(carnet.Ci)) return new(false, "La CI es proporcionada no es valida.");
+            return estado;
+        }
+
+        public static ValidateStatus ValidarPeriodo(PeriodoActualizacion periodod)
+        {
+            ValidateStatus estado = new();
+            if (periodod == null) return new(false, "La informacion proporcionada esta vacia.");
+            if (periodod.Anio == null) return new(false,"El año no puede estar vacio");
+            if (periodod.Anio < DateTime.Now.Year) return new(false,"No se puede setear unn periodo anterior a la fecha actual");
+            if (periodod.Semestre == null) return new(false,"El semestre no puede estar vacio.");
+            if (periodod.Semestre != 1 || periodod.Semestre != 2) return new(false,"El semestre debe ser un valor entre 1 y 2");
+            if (periodod.Fch_Inicio == null) return new(false, "La fecha de inicio no puede estar vacia.");
+            if (periodod.Fch_Fin == null) return new(false, "La fecha de fin no puede estar vacia.");
+            if (periodod.Fch_Fin < periodod.Fch_Inicio) return new(false, "La fecha de inicio no coincide con la fecha de fin.");
+            var range = new DateTime((int)periodod.Anio, (int)periodod.Semestre * 6, 15);
+            if (!(periodod.Fch_Inicio <= range && range <= periodod.Fch_Fin)) return new(false, "La cmobinacion de fechas, año y semestre no es válida.");
+
+            return estado;
+        }
     }
 }

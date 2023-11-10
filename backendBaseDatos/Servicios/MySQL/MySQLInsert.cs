@@ -1,5 +1,6 @@
 ﻿using backendBaseDatos.Models;
 using MySql.Data.MySqlClient;
+using System.Collections;
 
 namespace backendBaseDatos.Servicios.MySQL
 {
@@ -26,6 +27,39 @@ namespace backendBaseDatos.Servicios.MySQL
 
                 var affROws = cmd.ExecuteNonQuery();
                 if (affROws == 0) throw new Exception("EL comando no afecto ninguna fila.");
+                cmd.Connection.Close();
+            }
+        }
+
+        public void InsertarActualizarCarnetDeSalud(Carnet_Salud carnet)
+        {
+            string query = @"INSERT INTO carnet_salud(ci, fch_emision,fch_vencimiento, comprobante)
+                    VALUES (@ci, @fch_emi, @fch_venc, @comprobante)
+                    ON DUPLICATE KEY UPDATE 
+                        fch_emision = @fch_emi,
+                        fch_vencimiento = @fch_venc,
+                        comprobante = @comprobante;
+                    ";
+            using( MySqlCommand cmd = new MySqlCommand( query,getConection()))
+            {
+                cmd.Connection.Open();
+                cmd.Parameters.AddWithValue("@ci",carnet.Ci);
+                cmd.Parameters.AddWithValue("@fch_emi",carnet.Fecha_Emision);
+                cmd.Parameters.AddWithValue("@fch_venc",carnet.Fecha_Vencimiento);
+                cmd.Parameters.Add("@comprobante", MySqlDbType.Blob).Value = carnet.Image;
+                int rowAffected = cmd.ExecuteNonQuery();
+                if (rowAffected == 0) throw new Exception("No se efectuaron cambios en la base de datos.");
+                cmd.Connection.Close();
+            }
+        }
+        public void CrearPeriodo(PeriodoActualizacion periodo)
+        {
+            string query = @"";
+            using(MySqlCommand cmd = new MySqlCommand(query, getConection()))
+            {
+                cmd.Connection.Open();
+
+
                 cmd.Connection.Close();
             }
         }
