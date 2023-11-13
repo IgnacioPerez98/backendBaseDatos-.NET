@@ -54,13 +54,21 @@ namespace backendBaseDatos.Servicios.MySQL
         }
         public void CrearPeriodo(PeriodoActualizacion periodo)
         {
-            string query = @"";
+            string query = @"INSERT INTO periodos_actualizacion(
+                    anio, semestre, fch_inicio, fch_fin) VALUES ( @anio, @semestre, @fch_inicio, @fch_fin)";
             using(MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
                 cmd.Connection.Open();
-
-
+                cmd.Parameters.AddWithValue("@anio",periodo.Anio);
+                cmd.Parameters.AddWithValue("@semestre", periodo.Semestre);
+                cmd.Parameters.AddWithValue("@fch_inicio", periodo.Fch_Inicio);
+                cmd.Parameters.AddWithValue("@fch_fin", periodo.Fch_Fin);
+                var affRows = cmd.ExecuteNonQuery();
                 cmd.Connection.Close();
+                if(affRows == 0)
+                {
+                    throw new Exception("No se afectaron filas.");
+                }
             }
         }
     }

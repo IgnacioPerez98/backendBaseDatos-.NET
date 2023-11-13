@@ -6,7 +6,8 @@ namespace backendBaseDatos.Servicios.MySQL
     {
         public string Server { get; set; } = "localhost";
         public string Database { get; set; } = "proyectoback";
-        public string Username { get; set; } = "root";
+        public string Port { get; set; } = "3306";
+        public string Username { get; set; } = "sa";
         public string Password { get; set; } = "proyecto";
 
         private MySqlConnection _connection;
@@ -15,7 +16,7 @@ namespace backendBaseDatos.Servicios.MySQL
         {
             try
             {
-                string connectionString = $"Server={Server};Database={Database};Uid={Username};Pwd={Password};";
+                string connectionString = $"Server={Server};Port={Port};Database={Database};Uid={Username};Pwd={Password};";
                 if(_connection == null)
                 {
                     _connection = new MySqlConnection(connectionString);

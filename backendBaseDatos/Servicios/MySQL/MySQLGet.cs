@@ -39,5 +39,15 @@ namespace backendBaseDatos.Servicios.MySQL
             }
             return null;
         } 
+
+        public List<Funcionarios> ObtenerFucnionariosSinActualizar()
+        {
+            var lista = new List<Funcionarios>();
+
+
+
+
+            return lista;
+        }
     }
 }

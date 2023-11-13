@@ -10,32 +10,36 @@ namespace backendBaseDatos.Servicios
 
         public List<TurnoClinica> TurnosDelPeriodo { get; set; }= new List<TurnoClinica>();
 
-
-        private static ServicioHorariosClinica _instance = null;
-
-        private ServicioHorariosClinica()
+        public ServicioHorariosClinica()
         {
         }
 
-        public static ServicioHorariosClinica GetInstance()
+        public List<TurnoClinica> CargarHorarios()
         {
-            if(_instance == null)
+            List<TurnoClinica> TurnosDelPeriodo = new List<TurnoClinica>();
+
+            DateTime actual = InicioPeriodo;
+
+            // Generate days
+            while (actual.Date < FinPeriodo.Date || (actual.Date == FinPeriodo.Date && actual.TimeOfDay <= FinPeriodo.TimeOfDay))
             {
-                //pegarle a la base de datos Mongo DB
-
+                DateTime turnoInicio = new DateTime(actual.Year, actual.Month, actual.Day, 8, 0, 0);
+                for (int i = 0; i < 18; i++)
+                {
+                    TurnoClinica turno = new TurnoClinica
+                    {
+                        NumeroAgenda = i,
+                        EstaReservado = false,
+                        HoraInicio = turnoInicio,
+                        HoraFin = turnoInicio.AddMinutes(30)
+                    };
+                    TurnosDelPeriodo.Add(turno);
+                    turnoInicio = turnoInicio.AddMinutes(30);
+                }
+                actual = actual.AddDays(1);
             }
-            return _instance;
+            return TurnosDelPeriodo;
         }
-        public void CargarHorarios()
-        {
-            _instance.TurnosDelPeriodo = new List<TurnoClinica>();
 
-            //Genero dias
-            
-
-
-
-        }
-        
     }
 }

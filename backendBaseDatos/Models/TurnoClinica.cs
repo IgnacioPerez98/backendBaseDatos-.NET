@@ -3,7 +3,7 @@
     public class TurnoClinica
     {
         public DateTime HoraInicio { get; set; }
-        public DateTime HoraFin { get => HoraInicio.AddMinutes(30); }
+        public DateTime HoraFin { get; set; }
 
         public int NumeroAgenda { get; set; }
         public bool EstaReservado { get; set; } = false;
