@@ -35,14 +35,7 @@ namespace backendBaseDatos.Controllers
                 {
                     return StatusCode(400, validate);
                 }
-                try
-                {
-                    DDBBInsert.InsertarFuncionario(funcionario);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, ex);
-                }
+                DDBBInsert.InsertarFuncionario(funcionario);
                 return StatusCode(200, $"El funcionario {funcionario.Nombre}, se agrego con exito.");
 
             }catch (Exception ex)

@@ -66,9 +66,33 @@ namespace backendBaseDatos.Servicios.Validaciones
             ValidateStatus v = new();
             if (!(1900 <= anio && anio <= 3000)) return new(false, "EL año debe estar entre el  1900 y el 3000.");
             if (!(1 <= semestre && semestre <= 2)) return new(false, "El semstre debe ser 1 o 2.");
-
-
             return v;
+        }
+
+        public static ValidateStatus ValidarTurno(TurnoClinica turno)
+        {
+            ValidateStatus estado = new();
+            if (turno == null) return new(false, "El turno provisto no es válido.");
+            if (turno.HoraInicio == null) return new(false, "La hora de inicio es requerida");
+            if (turno.HoraFin == null) return new(false, "La hora de fin de turno es requerida.");
+            if (!FechaInPeriod(turno.HoraInicio)) return new(false, "La hora de inicio no esta en un perido de fechas valido.");
+            if (!FechaInPeriod(turno.HoraFin)) return new(false, "La hora de finalizacion no esta en un periodo de fechas valido");
+            if ((turno.HoraFin - turno.HoraInicio).Minutes > 35) return new(false, "Las consultas son de 30 minutos. ");//5 min de tolerancia.
+            return estado;
+        }
+
+        /// <summary>
+        /// Determina si una fecha esta dentro del rango valido. Retorna true si esta correcta, false si es incorrecta.
+        /// </summary>
+        /// <returns>bool</returns>
+        private static bool FechaInPeriod(DateTime Fecha)
+        {
+            if (Fecha == null) return false;
+            var inicio = new DateTime(1900, 1, 1);
+            var final = new DateTime(3000, 12, 31);
+            if (Fecha < inicio) return false;
+            if (inicio > Fecha) return false;
+            return true;
         }
     }
 }

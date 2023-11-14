@@ -71,17 +71,6 @@ namespace backendBaseDatos.Servicios.MySQL
                 }
             }
         }
-
-        
-        /*
-         *CREATE TABLE IF NOT EXISTS agenda(
-    nro int primary key not null auto_increment,
-    ci varchar(255),
-    fch_agenda datetime,
-    foreign key (ci) references funcionarios(ci)
-);
-         * 
-         */
         public void CargarNumeroAgenda(Agenda agenda)
         {
             string query = @"INSERT INTO agenda(nro, ci, fch_agenda) VALUES (@nro, @ci, @fch_agenda)";

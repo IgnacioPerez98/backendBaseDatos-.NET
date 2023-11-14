@@ -36,7 +36,8 @@ namespace backendBaseDatos.Controllers
                 {
                     return StatusCode(400, validate);
                 }
-                throw new NotImplementedException();    
+                DDBBInsert.CrearPeriodo(period);
+                return StatusCode(200, new { Message = "El periodo se creo de forma exitosa." });
             }catch (Exception ex)
             {
                 return StatusCode(500, ex);
@@ -53,14 +54,8 @@ namespace backendBaseDatos.Controllers
         {
             try
             {
-                try
-                {
-                    var listado = DDBBGet.ObtenerFuncionariosSinActualizar();
-                    return StatusCode(200, listado);                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, ex);
-                }
+                var listado = DDBBGet.ObtenerFuncionariosSinActualizar();
+                return StatusCode(200, listado);    
             }
             catch (Exception ex)
             {
