@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using backendBaseDatos.Servicios.MongoDB;
 
 namespace backendBaseDatos
 {
@@ -58,6 +59,7 @@ namespace backendBaseDatos
             // Add services to the container.
             builder.Services.AddTransient(typeof(MySQLInsert));
             builder.Services.AddTransient(typeof(MySQLGet));
+            builder.Services.AddTransient(typeof(ClinicaMongo));
 
             builder.Services.AddControllers();
 

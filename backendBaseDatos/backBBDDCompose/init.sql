@@ -9,15 +9,15 @@ FLUSH PRIVILEGES;
 /*Tablas*/
 SELECT SCHEMA_NAME
 FROM INFORMATION_SCHEMA.SCHEMATA
-WHERE SCHEMA_NAME = 'proyectoback';
+WHERE SCHEMA_NAME = 'proyectobbdd';
 
-CREATE SCHEMA IF NOT EXISTS proyectoback;
+CREATE SCHEMA IF NOT EXISTS proyectobbdd;
 
-USE proyectoback;
+USE proyectobbdd;
 
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 'proyectoback' AND TABLE_NAME = 'logins';
+WHERE TABLE_SCHEMA = 'proyectobbdd' AND TABLE_NAME = 'logins';
 
 CREATE TABLE IF NOT EXISTS logins(
     logid int primary key not null ,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS logins(
 
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 'proyectoback' AND TABLE_NAME = 'funcionarios';
+WHERE TABLE_SCHEMA = 'proyectobbdd' AND TABLE_NAME = 'funcionarios';
 
 CREATE TABLE IF NOT EXISTS funcionarios(
     ci varchar(255) primary key not null ,
@@ -42,10 +42,10 @@ CREATE TABLE IF NOT EXISTS funcionarios(
 
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 'proyectoback' AND TABLE_NAME = 'agenda';
+WHERE TABLE_SCHEMA = 'proyectobbdd' AND TABLE_NAME = 'agenda';
 
 CREATE TABLE IF NOT EXISTS agenda(
-    nro int primary key not null auto_increment,
+    nro varchar(255) primary key not null,
     ci varchar(255),
     fch_agenda datetime,
     foreign key (ci) references funcionarios(ci)
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS agenda(
 
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 'proyectoback' AND TABLE_NAME = 'carnet_salud';
+WHERE TABLE_SCHEMA = 'proyectobbdd' AND TABLE_NAME = 'carnet_salud';
 
 CREATE TABLE IF NOT EXISTS carnet_salud(
     ci varchar(255) not null primary key ,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS carnet_salud(
 
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 'proyectoback' AND TABLE_NAME = 'periodos_actualizacion';
+WHERE TABLE_SCHEMA = 'proyectobbdd' AND TABLE_NAME = 'periodos_actualizacion';
 
 CREATE TABLE IF NOT EXISTS periodos_actualizacion(
     anio int not null ,
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS periodos_actualizacion(
     primary key (fch_inicio, fch_fin)
 );
 
-USE proyectoback;
+USE proyectobbdd;
 
 INSERT INTO logins (logid, password) VALUES (0, '91aac10dc64306f3f2be458902f3787f632b8d84428c084c7e508f827fa6a56eaf74db4354ebdbcd47682c1077846f1da03c60849c8a4cba74fb05503069e692');
 

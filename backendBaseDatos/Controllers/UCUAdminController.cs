@@ -44,12 +44,23 @@ namespace backendBaseDatos.Controllers
         }
 
         [HttpGet("funcionariosdesactualizado")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Funcionarios recuperados con éxito")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Error en la validacion del periodo")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Error en el token proporcionado")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
         [Authorize]
-        public IActionResult ObtenerFuncionariosdesactualizados([FromBody] PeriodoActualizacion periodo)
+        public IActionResult ObtenerFuncionariosdesactualizados()
         {
             try
             {
-                throw new NotImplementedException();
+                try
+                {
+                    var listado = DDBBGet.ObtenerFuncionariosSinActualizar();
+                    return StatusCode(200, listado);                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex);
+                }
             }
             catch (Exception ex)
             {

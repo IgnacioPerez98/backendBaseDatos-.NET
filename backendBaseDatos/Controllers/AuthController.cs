@@ -34,11 +34,7 @@ namespace backendBaseDatos.Controllers
                     var token = JWTService.GenerateToken(model.Email);
                     return Ok(new
                     {
-                        Token = new JwtSecurityTokenHandler().WriteToken(token),
-                        Email = token.Payload.First().Value,
-                        ValidTo = token.Payload.ValidTo,
-                        iat = token.Payload.Iat
-
+                        Token = new JwtSecurityTokenHandler().WriteToken(token)
                     });
                 }
                 else

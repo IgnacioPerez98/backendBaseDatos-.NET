@@ -60,5 +60,15 @@ namespace backendBaseDatos.Servicios.Validaciones
 
             return estado;
         }
+
+        public static ValidateStatus ValidarAnioSemestre(int anio, int semestre)
+        {
+            ValidateStatus v = new();
+            if (!(1900 <= anio && anio <= 3000)) return new(false, "EL año debe estar entre el  1900 y el 3000.");
+            if (!(1 <= semestre && semestre <= 2)) return new(false, "El semstre debe ser 1 o 2.");
+
+
+            return v;
+        }
     }
 }
