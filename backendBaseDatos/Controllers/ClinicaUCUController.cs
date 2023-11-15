@@ -62,7 +62,7 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
         [Authorize]
-        public IActionResult ReservarHora([FromBody]TurnoClinica turno, int anio, int semestre,string ci)
+        public IActionResult ReservarHora([FromBody]TurnoClinica turno, [FromBody]int anio,[FromBody] int semestre,[FromBody]string ci)
         {
             try
             {
