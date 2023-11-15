@@ -25,7 +25,7 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Error en la validacion del funcionario")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Error en el token proporcionado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
-        //[Authorize]
+        [Authorize]
         public ActionResult CrearFuncionarios([FromBody] Funcionarios funcionario)
         {
             try

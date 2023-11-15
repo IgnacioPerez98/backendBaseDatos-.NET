@@ -81,3 +81,5 @@ INSERT INTO logins (logid, password) VALUES (0, '91aac10dc64306f3f2be458902f3787
 
 INSERT INTO funcionarios (ci, nombre, apellido, fch_nac, direccion, telefono, email, logid)
 VALUES ('49765166', 'Ignacio', 'Perez', '1998-04-09', 'Casucha 1234', '098110564', 'nachopp98@gmail.com', 0);
+
+INSERT INTO periodos_actualizacion(anio, semestre, fch_inicio, fch_fin) values (2023, 2, '2023-11-01','2023-11-15')
