@@ -24,7 +24,7 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description ="La informacion proporcionada no es correcta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description ="El token provisto no es valido.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description ="Excepción del servidor.")]
-        [Authorize]
+        //[Authorize]
         public IActionResult CargarCarnetSalud([FromBody] Carnet_Salud carnet)
         {
             // A partir del token, obtiene el usuario

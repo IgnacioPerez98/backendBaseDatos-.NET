@@ -1,0 +1,17 @@
+﻿#  En la carpeta raiz ejecuto : docker build -t proyectobbddback .
+#  En la carpeta dockercomposeconfig: docker compose up -d
+
+
+version: '3.8'
+services:
+  mysql:
+    container_name: "MySQLBasedeDatos"
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: proyecto
+      MYSQL_DATABASE: proyectoback
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

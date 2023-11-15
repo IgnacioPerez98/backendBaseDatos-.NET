@@ -84,7 +84,7 @@ WHERE C.fch_vencimiento < current_date() or C.fch_emision is null
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
                 cmd.Connection.Open();
-                cmd.Parameters.AddWithValue("@anio", anio);
+                cmd.Parameters.AddWithValue("@panio", anio);
                 cmd.Parameters.AddWithValue("@psemestre", semestre);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())

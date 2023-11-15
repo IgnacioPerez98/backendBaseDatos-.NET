@@ -31,7 +31,7 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "La informacion proporcionada no es correcta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
-        [Authorize]
+        //[Authorize]
         public IActionResult ObtenerFechas([FromRoute] int anio , int semestre)
         {
             try
@@ -56,13 +56,13 @@ namespace backendBaseDatos.Controllers
         }
 
 
-        [HttpPost("reservarhora")]
+        [HttpPost("reservarhora/{anio}/{semestre}/{ci}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Turno reservado exitosamente")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "La informacion proporcionada no es correcta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
-        [Authorize]
-        public IActionResult ReservarHora([FromBody]TurnoClinica turno, [FromBody]int anio,[FromBody] int semestre,[FromBody]string ci)
+        //[Authorize]
+        public IActionResult ReservarHora([FromBody]TurnoClinica turno,int anio, int semestre,string ci)
         {
             try
             {
