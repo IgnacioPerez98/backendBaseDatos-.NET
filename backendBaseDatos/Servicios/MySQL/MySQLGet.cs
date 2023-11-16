@@ -79,7 +79,7 @@ WHERE C.fch_vencimiento < current_date() or C.fch_emision is null
                     'Anio', anio,
                     'Semestre', semestre,
                     'Fch_Inicio',fch_inicio ,
-                    'Fch_Fin', fch_fin,
+                    'Fch_Fin', fch_fin
                 ) FROM periodos_actualizacion P WHERE P.anio = @panio and P.semestre = @psemestre";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
