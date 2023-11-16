@@ -31,9 +31,23 @@ public class ClinicaMongo:BaseMongoDB
 
     public List<TurnoClinica> ObtenerTurnos(PeriodoActualizacion periodo)
     {
-        //Devuelve los turnos disponibles y ya resevados.
-        //En el front mostrar como no disponibles los que estan reservados.
-        throw new NotImplementedException();
+
+        var db = this.obtenerBBDD();
+        var col = db.GetCollection<TurnoClinica>(periodo.ToString());
+        var items = col.CountDocuments(Builders<TurnoClinica>.Filter.Empty);
+        if(items == 0)
+        {
+            ServicioHorariosClinica srv = new ServicioHorariosClinica(periodo);
+            GuardarTurnos(srv.TurnosDelPeriodo,periodo.ToString());
+            return srv.TurnosDelPeriodo;
+        }
+        else
+        {
+            var res = col.Find(Builders<TurnoClinica>.Filter.Empty)
+                      .Project<TurnoClinica>(Builders<TurnoClinica>.Projection.Exclude("_id"));
+            return res.ToList();
+
+        }
     }
 
 

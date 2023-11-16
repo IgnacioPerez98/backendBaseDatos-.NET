@@ -88,7 +88,7 @@ namespace backendBaseDatos.Servicios.MySQL
                 cmd.Parameters.AddWithValue("@ci", agenda.Ci);
                 cmd.Parameters.AddWithValue("@fch_agenda", agenda.Fecha_Agenda);
                 var response = cmd.ExecuteNonQuery();
-                
+                if (response == 0) throw new Exception("No se pudo modificar el registro en la base de datos");
                 
                 cmd.Connection.Close();
                 

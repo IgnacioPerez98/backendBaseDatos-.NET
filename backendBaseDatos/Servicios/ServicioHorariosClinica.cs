@@ -10,11 +10,18 @@ namespace backendBaseDatos.Servicios
 
         public List<TurnoClinica> TurnosDelPeriodo { get; set; }= new List<TurnoClinica>();
 
-        public ServicioHorariosClinica()
+        /// <summary>
+        /// Crea el servicio y le carga los horarios.
+        /// </summary>
+        /// <param name="periodo"></param>
+        public ServicioHorariosClinica(PeriodoActualizacion periodo)
         {
+            InicioPeriodo = periodo.Fch_Inicio;
+            FinPeriodo = periodo.Fch_Fin;
+            TurnosDelPeriodo = CargarHorarios();
         }
 
-        public List<TurnoClinica> CargarHorarios()
+        private List<TurnoClinica> CargarHorarios()
         {
             List<TurnoClinica> TurnosDelPeriodo = new List<TurnoClinica>();
 

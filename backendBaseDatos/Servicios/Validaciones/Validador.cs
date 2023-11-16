@@ -81,6 +81,19 @@ namespace backendBaseDatos.Servicios.Validaciones
             return estado;
         }
 
+        public static ValidateStatus ValidarRangoFechas(DateOnly inicio, DateOnly final)
+        {
+            ValidateStatus v = new();
+            if(inicio == null ) return new (false, "Es necesario proporcionar una fecha de inicio.");
+            if(final == null ) return new (false, "Es necesario proporcionar una fecha de finalizacion.");
+            var init = new DateOnly(1900,1,1); 
+            var end = new DateOnly(3000,12,31);
+            if(!(init <= inicio && inicio <= end)) return new (false,"La fecha de inicio no esta en un rango válido");
+            if(!(init <= final && final <= end)) return new (false,"La fecha de finalización no esta en un rango válido");
+            if(inicio > final) return new(false, "La fecha de finalización no puede ser menor que la de apertura");
+            return v;
+        }
+
         /// <summary>
         /// Determina si una fecha esta dentro del rango valido. Retorna true si esta correcta, false si es incorrecta.
         /// </summary>
@@ -91,7 +104,7 @@ namespace backendBaseDatos.Servicios.Validaciones
             var inicio = new DateTime(1900, 1, 1);
             var final = new DateTime(3000, 12, 31);
             if (Fecha < inicio) return false;
-            if (inicio > Fecha) return false;
+            if (Fecha > final) return false;
             return true;
         }
     }

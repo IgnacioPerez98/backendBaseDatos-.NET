@@ -72,20 +72,23 @@ WHERE C.fch_vencimiento < current_date() or C.fch_emision is null
             return lista;
         }
 
-        public PeriodoActualizacion ObtenerPeriodoPorPK(int anio, int semestre)
+        public PeriodoActualizacion ObtenerPeriodoPorPK(DateOnly inicio, DateOnly fin)
         {
+            var start = new DateTime(inicio.Year, inicio.Month, inicio.Day);
+            var finilize = new DateTime(fin.Year, fin.Month, fin.Day);
+
             PeriodoActualizacion period = null;
             string query = @"SELECT JSON_OBJECT(
                     'Anio', anio,
                     'Semestre', semestre,
                     'Fch_Inicio',fch_inicio ,
                     'Fch_Fin', fch_fin
-                ) FROM periodos_actualizacion P WHERE P.anio = @panio and P.semestre = @psemestre";
+                ) FROM periodos_actualizacion P WHERE P.fch_inicio = @fchinicio and P.fch_fin = @fchfin";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
                 cmd.Connection.Open();
-                cmd.Parameters.AddWithValue("@panio", anio);
-                cmd.Parameters.AddWithValue("@psemestre", semestre);
+                cmd.Parameters.AddWithValue("@fchinicio", start);
+                cmd.Parameters.AddWithValue("@fchfin", finilize);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
