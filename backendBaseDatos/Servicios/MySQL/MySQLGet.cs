@@ -45,14 +45,13 @@ namespace backendBaseDatos.Servicios.MySQL
             var lista = new List<FuncionarioPendiente>();
             string query = @"SELECT json_arrayagg(
                         json_object(
-                            'Nombre' F.nombre, 
+                            'Nombre', F.nombre, 
                             'Apellido',F.apellido,
-                            'Email',F.email ,
+                            'Email',F.email
                         )
-                    )  
-FROM funcionarios F join carnet_salud C on F.ci = C.ci
-WHERE C.fch_vencimiento < current_date() or C.fch_emision is null
-";
+                    ) FROM funcionarios F left join carnet_salud C on F.ci = C.ci
+                    where C.fch_vencimiento is null or C.fch_vencimiento < curdate()
+                    ";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
                 cmd.Connection.Open();

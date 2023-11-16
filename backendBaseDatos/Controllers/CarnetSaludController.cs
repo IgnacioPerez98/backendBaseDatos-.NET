@@ -30,7 +30,7 @@ namespace backendBaseDatos.Controllers
             // A partir del token, obtiene el usuario
             try
             {
-                var valRes = Validador.ValidarCanetdeSalud(carnet);
+                var valRes = Validador.ValidarCarnetdeSalud(carnet);
                 if(!valRes.IsOK)
                 {
                     return StatusCode(400, valRes);

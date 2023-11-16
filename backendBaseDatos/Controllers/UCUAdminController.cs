@@ -26,7 +26,7 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Error en la validacion del periodo")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Error en el token proporcionado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
-        //[Authorize]
+        [Authorize]
         public IActionResult AbrirPeriodoEspecial([FromBody]PeriodoActualizacion period)
         {
             try
@@ -46,10 +46,10 @@ namespace backendBaseDatos.Controllers
 
         [HttpGet("funcionariosdesactualizado")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Funcionarios recuperados con éxito")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Error en la validacion del periodo")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Error en la validación del periodo")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Error en el token proporcionado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
-        //[Authorize]
+        [Authorize]
         public IActionResult ObtenerFuncionariosdesactualizados()
         {
             try
@@ -61,7 +61,6 @@ namespace backendBaseDatos.Controllers
             {
                 return StatusCode(500, ex);
             }
-
         }
 
 

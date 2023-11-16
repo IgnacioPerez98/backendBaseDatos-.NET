@@ -31,7 +31,7 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "La informacion proporcionada no es correcta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
-        //[Authorize]
+        [Authorize]
         public IActionResult ObtenerFechas([FromRoute] DateOnly inicio , DateOnly fin)
         {
             try
@@ -61,7 +61,7 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "La informacion proporcionada no es correcta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
-        //[Authorize]
+        [Authorize]
         public IActionResult ReservarHora([FromBody]TurnoClinica turno,DateOnly inicioperiodo , DateOnly finperiodo,string ci)
         {
             try
@@ -97,7 +97,7 @@ namespace backendBaseDatos.Controllers
                 nueva.Numero = turno.HoraInicio.ToShortDateString() + turno.NumeroAgenda;
                 nueva.Fecha_Agenda = turno.HoraInicio;
                 DDBBInsert.CargarNumeroAgenda(nueva);
-
+                //No valido que la cedula exista, xq si no existe va lanzar una excepcion cuando intente cargar el numero de agenda
                 //para que se puedan agendar mas de uno en un dia, y con mas informacion asociada a los turnos en especifico, como cache.
                 ClinicaMongoDB.ReservarTurno(turno, periodoActualizacion.ToString());
                 return StatusCode(200, new { Message = "El turno se reservo de forma exitosa." });
