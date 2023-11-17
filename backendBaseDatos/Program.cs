@@ -61,6 +61,9 @@ namespace backendBaseDatos
             builder.Services.AddTransient(typeof(MySQLGet));
             builder.Services.AddTransient(typeof(ClinicaMongo));
 
+            //Web Socket
+            builder.Services.AddSignalR();
+
             builder.Services.AddControllers();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -82,6 +85,7 @@ namespace backendBaseDatos
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.MapControllers();
+
 
             app.Run();
         }
