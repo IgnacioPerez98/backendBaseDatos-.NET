@@ -1,7 +1,8 @@
 ﻿#  En la carpeta raiz ejecuto : docker build -t proyectobbddback .
 #  En la carpeta dockercomposeconfig: docker compose up -d
-version: '3.8'
 
+
+version: '3.8'
 services:
   mysql:
     container_name: "MySQLBasedeDatos"
@@ -11,20 +12,18 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: proyecto
-      MYSQL_DATABASE: proyectoback
+      MYSQL_DATABASE: proyectobbdd
     volumes:
-      - ./dockercomposeconfig/init.sql:/docker-entrypoint-initdb.d/init.sql
-
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   mongodb:
-    image: mongo
-    container_name: my-mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
-
+      image: mongo
+      container_name: my-mongodb
+      ports:
+        - "27017:27017"
+      volumes:
+        - mongodb_data:/data/db
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: admin
 volumes:
-  mongodb_data:
+    mongodb_data:
