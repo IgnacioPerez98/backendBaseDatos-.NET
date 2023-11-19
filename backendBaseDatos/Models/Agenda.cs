@@ -2,8 +2,10 @@
 {
     public class Agenda
     {
-        public string Numero {  get; set; }
-        public string? Ci { get; set; }
+        public int Numero {  get; set; }
+        public string? Ci { get; set; } = null;
         public DateTime? Fecha_Agenda { get; set; }
+        public bool EstaReservado { get; set; }
+        
     }
 }

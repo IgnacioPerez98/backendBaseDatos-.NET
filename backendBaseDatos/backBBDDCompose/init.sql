@@ -45,9 +45,11 @@ FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA = 'proyectobbdd' AND TABLE_NAME = 'agenda';
 
 CREATE TABLE IF NOT EXISTS agenda(
-    nro varchar(255) primary key not null,
+    nro int not null,
     ci varchar(255),
     fch_agenda datetime,
+    estareservado bool,
+    primary key (nro,fch_agenda),
     foreign key (ci) references funcionarios(ci)
 );
 

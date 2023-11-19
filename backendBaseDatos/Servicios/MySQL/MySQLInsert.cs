@@ -80,13 +80,14 @@ namespace backendBaseDatos.Servicios.MySQL
         }
         public void CargarNumeroAgenda(Agenda agenda)
         {
-            string query = @"INSERT INTO agenda(nro, ci, fch_agenda) VALUES (@nro, @ci, @fch_agenda)";
+            string query = @"INSERT INTO agenda(nro, ci, fch_agenda,estareservado) VALUES (@nro, @ci, @fch_agenda,@estareservado)";
             using (MySqlCommand cmd = new MySqlCommand(query,getConection()))
             {
                 cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@nro", agenda.Numero);
                 cmd.Parameters.AddWithValue("@ci", agenda.Ci);
                 cmd.Parameters.AddWithValue("@fch_agenda", agenda.Fecha_Agenda);
+                cmd.Parameters.AddWithValue("@estareservado", agenda.EstaReservado);
                 var response = cmd.ExecuteNonQuery();
                 if (response == 0) throw new Exception("No se pudo modificar el registro en la base de datos");
                 

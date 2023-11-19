@@ -8,7 +8,7 @@ namespace backendBaseDatos.Servicios
         public DateTime InicioPeriodo {  get; set; }
         public DateTime FinPeriodo { get; set; }
 
-        public List<TurnoClinica> TurnosDelPeriodo { get; set; }= new List<TurnoClinica>();
+        public List<Agenda> TurnosDelPeriodo { get; set; }= new List<Agenda>();
 
         /// <summary>
         /// Crea el servicio y le carga los horarios.
@@ -21,9 +21,9 @@ namespace backendBaseDatos.Servicios
             TurnosDelPeriodo = CargarHorarios();
         }
 
-        private List<TurnoClinica> CargarHorarios()
+        private List<Agenda> CargarHorarios()
         {
-            List<TurnoClinica> TurnosDelPeriodo = new List<TurnoClinica>();
+            List<Agenda> TurnosDelPeriodo = new List<Agenda>();
 
             DateTime actual = InicioPeriodo;
 
@@ -33,12 +33,11 @@ namespace backendBaseDatos.Servicios
                 DateTime turnoInicio = new DateTime(actual.Year, actual.Month, actual.Day, 8, 0, 0);
                 for (int i = 0; i < 18; i++)
                 {
-                    TurnoClinica turno = new TurnoClinica
+                    Agenda turno = new Agenda()
                     {
-                        NumeroAgenda = i,
+                        Numero = i,
                         EstaReservado = false,
-                        HoraInicio = turnoInicio,
-                        HoraFin = turnoInicio.AddMinutes(30)
+                        Fecha_Agenda = turnoInicio
                     };
                     TurnosDelPeriodo.Add(turno);
                     turnoInicio = turnoInicio.AddMinutes(30);

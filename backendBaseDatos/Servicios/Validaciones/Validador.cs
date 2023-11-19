@@ -67,15 +67,11 @@ namespace backendBaseDatos.Servicios.Validaciones
             return v;
         }
 
-        public static ValidateStatus ValidarTurno(TurnoClinica turno)
+        public static ValidateStatus ValidarTurno(Agenda turno)
         {
             ValidateStatus estado = new();
             if (turno == null) return new(false, "El turno provisto no es válido.");
-            if (turno.HoraInicio == null) return new(false, "La hora de inicio es requerida");
-            if (turno.HoraFin == null) return new(false, "La hora de fin de turno es requerida.");
-            if (!FechaInPeriod(turno.HoraInicio)) return new(false, "La hora de inicio no esta en un perido de fechas valido.");
-            if (!FechaInPeriod(turno.HoraFin)) return new(false, "La hora de finalizacion no esta en un periodo de fechas valido");
-            if ((turno.HoraFin - turno.HoraInicio).Minutes > 35) return new(false, "Las consultas son de 30 minutos. ");//5 min de tolerancia.
+            if (turno.Fecha_Agenda == null) return new(false, "La hora de inicio es requerida");
             return estado;
         }
 

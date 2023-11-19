@@ -100,5 +100,54 @@ namespace backendBaseDatos.Servicios.MySQL
             }
             return period;
         }
+
+        public List<Agenda> ObtenerHorariosporPeriodo(PeriodoActualizacion p)
+        {
+            string query = @"SELECT JSON_ARRAYAGG(JSON_OBJECT(
+	            'nro',nro,
+                'ci',ci,
+                'fch_agenda',fch_agenda,
+                'estareservado',estareservado
+            )) FROM agenda where fch_agenda BETWEEN @inicio and @final;";
+            using (MySqlCommand cmd = new MySqlCommand(query,getConection()))
+            {
+                cmd.Connection.Open();
+                cmd.Parameters.AddWithValue("@inicio", p.Fch_Inicio);
+                cmd.Parameters.AddWithValue("@final", p.Fch_Fin);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    return JsonConvert.DeserializeObject<List<Agenda>>(reader.GetString(0));
+                }
+                cmd.Connection.Close();
+            }
+            throw new Exception("No se pudo recuperar la informacion para el periodo proporcionado");
+        }
+
+        public Carnet_Salud GetCarnetSaludByCI(string ci)
+        {
+            string query = @"SELECT json_object(
+	            'ci',ci,
+                'fch_emision', fch_emision,
+                'fch_vencimiento', fch_vencimiento,
+                'comprobante', comprobante
+            ) FROM carnet_salud where ci = @ci;";
+            using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
+            {
+                cmd.Connection.Open();
+                cmd.Parameters.AddWithValue("@ci", ci);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (!reader.IsDBNull(0))
+                    {
+                        return JsonConvert.DeserializeObject<Carnet_Salud>(reader.GetString(0));
+                    }
+                }
+                
+                cmd.Connection.Close();
+            }
+            throw new Exception("No se puedo encontrar el Carnet de Salud");
+        }
     }
 }

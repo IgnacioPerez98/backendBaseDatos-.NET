@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using backendBaseDatos.Models;
 
 namespace backendBaseDatos.Controllers
 {
@@ -39,12 +40,12 @@ namespace backendBaseDatos.Controllers
                 }
                 else
                 {
-                    return StatusCode(403, new { Message = "Fallo la autenticación, la clave y/o el mail proporcionados no son válidos" });
+                    return StatusCode(403, new Error( 403,"Fallo la autenticación, la clave y/o el mail proporcionados no son válidos"));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "Se produjo un error.", Details = ex.ToString() });
+                return StatusCode(500, new Error( 403,"Se produjo un error."));
             }
         }
 

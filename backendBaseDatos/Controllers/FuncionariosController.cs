@@ -33,7 +33,7 @@ namespace backendBaseDatos.Controllers
                 var validate = Validador.ValidarFuncionario(funcionario);
                 if (!validate.IsOK)
                 {
-                    return StatusCode(400, validate);
+                    return StatusCode(400, new Error(400, validate.Message));
                 }
                 DDBBInsert.InsertarFuncionario(funcionario);
                 return StatusCode(200, $"El funcionario {funcionario.Nombre}, se agrego con exito.");
@@ -41,7 +41,7 @@ namespace backendBaseDatos.Controllers
             }catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear funcionario.");
-                return StatusCode(500,ex);
+                return StatusCode(500,new Error(500, ex.Message));
             }
         }
     }
