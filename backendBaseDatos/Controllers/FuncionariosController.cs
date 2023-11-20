@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
+using backendBaseDatos.Servicios;
 
 namespace backendBaseDatos.Controllers
 {
@@ -29,12 +30,13 @@ namespace backendBaseDatos.Controllers
         public ActionResult CrearFuncionarios([FromBody] Funcionarios funcionario)
         {
             try
-            {                
+            {
                 var validate = Validador.ValidarFuncionario(funcionario);
                 if (!validate.IsOK)
                 {
                     return StatusCode(400, new Error(400, validate.Message));
                 }
+                var token = this.Request.Headers.Authorization.ToString().Split("")[1];
                 DDBBInsert.InsertarFuncionario(funcionario);
                 return StatusCode(200, $"El funcionario {funcionario.Nombre}, se agrego con exito.");
 

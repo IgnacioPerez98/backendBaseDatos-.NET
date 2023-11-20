@@ -80,7 +80,9 @@ namespace backendBaseDatos.Servicios.MySQL
         }
         public void CargarNumeroAgenda(Agenda agenda)
         {
-            string query = @"INSERT INTO agenda(nro, ci, fch_agenda,estareservado) VALUES (@nro, @ci, @fch_agenda,@estareservado)";
+            string query = @"INSERT INTO agenda(nro, ci, fch_agenda,estareservado) VALUES (@nro, @ci, @fch_agenda,@estareservado)
+                            ON DUPLICATE KEY UPDATE estareservado = 1 , ci = @ci;
+                ";
             using (MySqlCommand cmd = new MySqlCommand(query,getConection()))
             {
                 cmd.Connection.Open();

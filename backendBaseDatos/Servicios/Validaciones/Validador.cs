@@ -66,7 +66,6 @@ namespace backendBaseDatos.Servicios.Validaciones
             if (!(1 <= semestre && semestre <= 2)) return new(false, "El semstre debe ser 1 o 2.");
             return v;
         }
-
         public static ValidateStatus ValidarTurno(Agenda turno)
         {
             ValidateStatus estado = new();

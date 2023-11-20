@@ -1,4 +1,5 @@
 ﻿using backendBaseDatos.Models;
+using backendBaseDatos.Servicios;
 using backendBaseDatos.Servicios.MySQL;
 using backendBaseDatos.Servicios.Validaciones;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,11 @@ namespace backendBaseDatos.Controllers
         {
             try
             {
+                var token = this.Request.Headers.Authorization.ToString().Split(" ")[1];
+                if (JWTService.RolFromToken(token) != "admin")
+                {
+                    return StatusCode(403, new Error(403, "No tiene acceso a esta operación"));
+                }
                 var validate = Validador.ValidarPeriodo(period);
                 if (validate.IsOK == false )
                 {
@@ -54,6 +60,11 @@ namespace backendBaseDatos.Controllers
         {
             try
             {
+                var token = this.Request.Headers.Authorization.ToString().Split(" ")[1];
+                if (JWTService.RolFromToken(token) != "admin")
+                {
+                    return StatusCode(403, new Error(403, "No tiene acceso a esta operación"));
+                }
                 var listado = DDBBGet.ObtenerFuncionariosSinActualizar();
                 return StatusCode(200, listado);    
             }

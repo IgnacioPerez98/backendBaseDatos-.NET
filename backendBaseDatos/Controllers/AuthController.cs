@@ -25,14 +25,15 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Retorna el token")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "Error en el token proporcionado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
-        public IActionResult GetToken([FromBody] LoginRequest model)
+        public IActionResult GetToken([FromBody] AuthLogin model)
         {
             try
             {
                 var user = AuthService.ValidarUsuario(model.Email, model.Password);
-                if (user)
+                if (user != null)
                 {
-                    var token = JWTService.GenerateToken(model.Email);
+                    string rol = user.EsAdmin ? "admin" : "funcionario";
+                    var token = JWTService.GenerateToken(model.Email, rol);
                     return Ok(new
                     {
                         Token = new JwtSecurityTokenHandler().WriteToken(token)

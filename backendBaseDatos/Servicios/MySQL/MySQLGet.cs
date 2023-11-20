@@ -10,7 +10,7 @@ namespace backendBaseDatos.Servicios.MySQL
     {
         public LoginRequest ObtenerPorEmail(string email)
         {
-            string query = @"SELECT F.email, L.password
+            string query = @"SELECT F.email, L.password,F.esadmin
                         FROM funcionarios F join logins L on F.logid = L.logid
                         WHERE F.email = @email_param
                         ";
@@ -23,11 +23,11 @@ namespace backendBaseDatos.Servicios.MySQL
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-
                         return new LoginRequest
                         {
                             Email = reader.GetString(0),
                             Password = reader.GetString(1),
+                            EsAdmin = reader.GetBoolean(2)
                         };
                     }
                     cmd.Connection.Close();
@@ -50,7 +50,7 @@ namespace backendBaseDatos.Servicios.MySQL
                             'Email',F.email
                         )
                     ) FROM funcionarios F left join carnet_salud C on F.ci = C.ci
-                    where C.fch_vencimiento is null or C.fch_vencimiento < curdate()
+                    where F.esadmin = 0 AND ( C.fch_vencimiento is null or C.fch_vencimiento < curdate())
                     ";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
@@ -104,24 +104,29 @@ namespace backendBaseDatos.Servicios.MySQL
         public List<Agenda> ObtenerHorariosporPeriodo(PeriodoActualizacion p)
         {
             string query = @"SELECT JSON_ARRAYAGG(JSON_OBJECT(
-	            'nro',nro,
-                'ci',ci,
-                'fch_agenda',fch_agenda,
-                'estareservado',estareservado
+	            'Numero',nro,
+                'Ci',ci,
+                'Fecha_Agenda',fch_agenda,
+                'EstaReservado',estareservado
             )) FROM agenda where fch_agenda BETWEEN @inicio and @final;";
-            using (MySqlCommand cmd = new MySqlCommand(query,getConection()))
+            using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
+                List<Agenda> agendas = new List<Agenda>();
                 cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@inicio", p.Fch_Inicio);
                 cmd.Parameters.AddWithValue("@final", p.Fch_Fin);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    return JsonConvert.DeserializeObject<List<Agenda>>(reader.GetString(0));
+                    if (!reader.IsDBNull(0))
+                    {
+                        agendas = JsonConvert.DeserializeObject<List<Agenda>>(reader.GetString(0));
+                    }
                 }
+
                 cmd.Connection.Close();
+                return agendas;
             }
-            throw new Exception("No se pudo recuperar la informacion para el periodo proporcionado");
         }
 
         public Carnet_Salud GetCarnetSaludByCI(string ci)

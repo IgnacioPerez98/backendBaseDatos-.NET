@@ -43,10 +43,11 @@ namespace backendBaseDatos.Controllers
                 if (fechitas.Count() == 0)
                 {
                     ServicioHorariosClinica s = new ServicioHorariosClinica(periodoActualizacion);
-                    foreach (var t in fechitas)
+                    foreach (var t in s.TurnosDelPeriodo)
                     {
                         DDBBInsert.CargarNumeroAgenda(t);
                     }
+                    fechitas = new List<Agenda>(s.TurnosDelPeriodo);
                 }
                 if (fechitas != null)
                 {
@@ -61,13 +62,13 @@ namespace backendBaseDatos.Controllers
         }
 
 
-        [HttpPost("reservarhora/{inicioperiodo}/{finperiodo}/{ci}")]
+        [HttpPost("reservarhora/{inicioperiodo}/{finperiodo}")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "Turno reservado exitosamente")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "La informacion proporcionada no es correcta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
         [Authorize]
-        public IActionResult ReservarHora([FromBody]Agenda turno,DateOnly inicioperiodo , DateOnly finperiodo,string ci)
+        public IActionResult ReservarHora([FromBody]Agenda turno,DateOnly inicioperiodo , DateOnly finperiodo)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace backendBaseDatos.Controllers
                     return StatusCode(400, new Error(400, valPeriodo.Message));
                 }
 
-                var ciValidate = CI_Validate.IsCIValid(ci);
+                var ciValidate = CI_Validate.IsCIValid(turno.Ci);
                 if (!ciValidate)
                 {
                     return StatusCode(400, new Error(400,"La CI proporcionada no es válida, no verifica el dígito de validación." ));
@@ -96,7 +97,7 @@ namespace backendBaseDatos.Controllers
                 }
                 //Reserva en la Base SQL
                 Agenda nueva = new Agenda();
-                nueva.Ci = ci;
+                nueva.Ci = turno.Ci;
                 nueva.Numero = turno.Numero;
                 nueva.Fecha_Agenda = turno.Fecha_Agenda;
                 DDBBInsert.CargarNumeroAgenda(nueva);

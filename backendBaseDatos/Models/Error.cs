@@ -1,6 +1,6 @@
 namespace backendBaseDatos.Models;
 
-public class Error:Exception
+public class Error
 {
     public string Mensaje { get; set; }
     public int ErrorCode { get; set; }

@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS logins(
     logid int primary key not null ,
     password varchar(255) not null
 );
-
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA = 'proyectobbdd' AND TABLE_NAME = 'funcionarios';
@@ -36,6 +35,7 @@ CREATE TABLE IF NOT EXISTS funcionarios(
     direccion varchar(255),
     telefono varchar(45),
     email varchar(255),
+    esadmin boolean default false,
     logid int unique not null,
     foreign key (logid) references logins(logid)
 );
