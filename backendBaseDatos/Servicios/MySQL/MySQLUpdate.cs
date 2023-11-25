@@ -16,9 +16,9 @@ namespace backendBaseDatos.Servicios.MySQL
             {
                 if (f != null)
                 {
-                    if (!string.IsNullOrEmpty(f.Direccion)) { query += " direccion = @ci,"; cmd.Parameters.AddWithValue("@ci", f.Direccion); }
-                    if (!string.IsNullOrEmpty(f.Telefono)) { query += " telefono = @ci,"; cmd.Parameters.AddWithValue("@ci", f.Telefono); }
-                    if (!string.IsNullOrEmpty(f.Email)) { query += " email = @ci,"; cmd.Parameters.AddWithValue("@ci", f.Email); }
+                    if (!string.IsNullOrEmpty(f.Direccion)) { query += " direccion = @direccion,"; cmd.Parameters.AddWithValue("@direccion", f.Direccion); }
+                    if (!string.IsNullOrEmpty(f.Telefono)) { query += " telefono = @tel,"; cmd.Parameters.AddWithValue("@tel", f.Telefono); }
+                    if (!string.IsNullOrEmpty(f.Email)) { query += " email = @mail,"; cmd.Parameters.AddWithValue("@mail", f.Email); }
                 }
                 if(query != "UPDATE funcionarios SET  ")
                 {   
@@ -37,7 +37,7 @@ namespace backendBaseDatos.Servicios.MySQL
                     if (!string.IsNullOrEmpty(f.Password)) 
                     { 
                         query += $" password = @ci where logid = @logid "; 
-                        cmd.Parameters.AddWithValue("@ci", f.Password); 
+                        cmd.Parameters.AddWithValue("@ci", SHA512Service.Encrypt(f.Password)); 
                     }
                 }
                 if (query != "UPDATE funcionarios SET  ")

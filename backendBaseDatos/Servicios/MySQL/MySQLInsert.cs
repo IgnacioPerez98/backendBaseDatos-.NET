@@ -20,7 +20,7 @@ namespace backendBaseDatos.Servicios.MySQL
             }
             string query = @"
                 INSERT INTO funcionarios(ci,nombre,apellido,fch_nac,direccion, telefono, email,esadmin,logid) 
-                values (@_v1,@_v2,@_v3,@_v4,@_v5,@_v6,@_v7,@v_8 (SELECT COALESCE(MAX(logid),0) FROM logins))";
+                values (@_v1,@_v2,@_v3,@_v4,@_v5,@_v6,@_v7,@_v8, (SELECT COALESCE(MAX(logid),0) FROM logins))";
             using(MySqlCommand  cmd = new MySqlCommand(query,getConection()))
             {
                 cmd.Connection.Open();

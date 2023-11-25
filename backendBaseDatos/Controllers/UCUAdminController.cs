@@ -61,6 +61,7 @@ namespace backendBaseDatos.Controllers
             try
             {
                 var token = this.Request.Headers.Authorization.ToString().Split(" ")[1];
+                var rol = JWTService.RolFromToken(token);
                 if (JWTService.RolFromToken(token) != "admin")
                 {
                     return StatusCode(403, new Error(403, "No tiene acceso a esta operación"));

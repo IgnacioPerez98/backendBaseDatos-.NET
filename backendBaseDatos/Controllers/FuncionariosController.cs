@@ -34,7 +34,7 @@ namespace backendBaseDatos.Controllers
         {
             try
             {
-                var token = this.Request.Headers.Authorization.ToString().Split("")[1];
+                var token = this.Request.Headers.Authorization.ToString().Split(" ")[1];
                 var validate = Validador.ValidarFuncionario(funcionario, token);
                 if (!validate.IsOK)
                 {
@@ -61,7 +61,7 @@ namespace backendBaseDatos.Controllers
         {
             try
             {
-                var logId = JWTService.ClaimFromToken(Request.Headers.Authorization.ToString().Split("")[1], "id");
+                var logId = JWTService.ClaimFromToken(Request.Headers.Authorization.ToString().Split(" ")[1], "id");
                 if (string.IsNullOrEmpty(logId)) return StatusCode(500, new Error(500, "No se pudo recuperar el id del funcionario."));
                 //El func no se valida porque lo hace la consulta
                 DDBBUpdate.ActualizarFuncionario(func, logId);
