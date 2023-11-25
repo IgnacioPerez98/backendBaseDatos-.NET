@@ -1,6 +1,6 @@
 # Backend Bases Datos 1.
 
-* Express JS
+* ASP NET
 * MySQL
 
 ---
