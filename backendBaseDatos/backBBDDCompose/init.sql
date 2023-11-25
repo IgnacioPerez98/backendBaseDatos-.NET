@@ -1,6 +1,6 @@
 ﻿/*Script que se ejecuta cuando se crea el contenedor de MySql*/
 /*Usuario para conectarse*/
-CREATE USER 'sa'@'%' IDENTIFIED WITH mysql_native_password BY 'proyecto';
+CREATE USER 'sa'@'%' IDENTIFIED BY 'proyecto';
 GRANT USAGE ON *.* TO 'sa'@'%';
 ALTER USER 'sa'@'%' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
 GRANT ALL PRIVILEGES ON proyectobbdd.* TO 'sa'@'%';
