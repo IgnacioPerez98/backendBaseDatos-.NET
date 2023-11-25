@@ -1,5 +1,6 @@
 ﻿using backendBaseDatos.Models;
 using backendBaseDatos.Models.Requests;
+using backendBaseDatos.Models.Responses;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System.Reflection.PortableExecutable;
@@ -8,9 +9,9 @@ namespace backendBaseDatos.Servicios.MySQL
 {
     public class MySQLGet : BaseMySql
     {
-        public LoginRequest ObtenerPorEmail(string email)
+        public UserDataForToken ObtenerPorEmail(string email)
         {
-            string query = @"SELECT F.email, L.password,F.esadmin
+            string query = @"SELECT F.email, L.password,F.esadmin, F.nombre
                         FROM funcionarios F join logins L on F.logid = L.logid
                         WHERE F.email = @email_param
                         ";
@@ -23,11 +24,12 @@ namespace backendBaseDatos.Servicios.MySQL
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        return new LoginRequest
+                        return new UserDataForToken
                         {
                             Email = reader.GetString(0),
                             Password = reader.GetString(1),
-                            EsAdmin = reader.GetBoolean(2)
+                            EsAdmin = reader.GetBoolean(2),
+                            Nombre = reader.GetString(3),
                         };
                     }
                     cmd.Connection.Close();
@@ -128,7 +130,33 @@ namespace backendBaseDatos.Servicios.MySQL
                 return agendas;
             }
         }
+        public List<Periodos> GetPeriodos()
+        {
+            string query = @"SELECT JSON_ARRAY
+                            (
+	                            JSON_OBJECT(
+		                            'Anio' ,anio,
+                                    'Semesttre', semestre,
+                                    'Fch_Inicio',fch_inicio,
+                                    'Fch_Fin', fch_fin
+                                )
+                            ) FROM periodos_actualizacion;";
+            using(MySqlCommand cmd = new MySqlCommand( query, getConection()))
+            {
+                cmd.Connection.Open();
+                var reader =cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (!reader.IsDBNull(0))
+                    {
+                        return JsonConvert.DeserializeObject<List<Periodos>>(reader.GetString(0));
+                    }
+                }   
+                cmd.Connection.Close();
+            }
+            return new List<Periodos>();
 
+        }
         public Carnet_Salud GetCarnetSaludByCI(string ci)
         {
             string query = @"SELECT json_object(

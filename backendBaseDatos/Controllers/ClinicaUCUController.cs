@@ -109,5 +109,17 @@ namespace backendBaseDatos.Controllers
                 return StatusCode(500, new Error(500,ex.Message));
             }
         }
+
+        [HttpGet("periodos")]
+        public ActionResult ObtenerPeriodos()
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new Error(500, ex.Message));
+            }
+        }
     }
 }

@@ -9,19 +9,20 @@ namespace backendBaseDatos.Servicios
         public static string SecretKey = "5b8dabee936e7e1d74539e001a52b859d514355488b523d3084a5f6945a05035e54e0f3ee93afcf3d6fcbca393418df8a1d56bb2ac860b7c170bcec68a869235";
         private static readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(SecretKey));
 
-        public static JwtSecurityToken GenerateToken(string email,string role)
+        public static JwtSecurityToken GenerateToken(string email,string role,string name)
         {
             var claims = new[]
             {
                 new Claim("email", email),
-                new Claim("rol",role)
+                new Claim("rol",role),
+                new Claim("nombre", name)
             };
 
             var token = new JwtSecurityToken(
                 issuer: "Bases de Datos",
                 audience: "UCU",
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha512)
             );
             return token;

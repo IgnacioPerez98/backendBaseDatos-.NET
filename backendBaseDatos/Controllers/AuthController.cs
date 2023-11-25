@@ -33,7 +33,7 @@ namespace backendBaseDatos.Controllers
                 if (user != null)
                 {
                     string rol = user.EsAdmin ? "admin" : "funcionario";
-                    var token = JWTService.GenerateToken(model.Email, rol);
+                    var token = JWTService.GenerateToken(model.Email, rol,user.Nombre);
                     return Ok(new
                     {
                         Token = new JwtSecurityTokenHandler().WriteToken(token)

@@ -46,5 +46,19 @@ namespace backendBaseDatos.Controllers
                 return StatusCode(500,new Error(500, ex.Message));
             }
         }
+
+
+        //public ActionResult ActualizarFuncionario()
+        //{
+        //    try
+        //    {
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error al crear funcionario.");
+        //        return StatusCode(500, new Error(500, ex.Message));
+        //    }
+        //}
     }
 }
