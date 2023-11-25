@@ -4,10 +4,10 @@ namespace backendBaseDatos.Servicios.MySQL
 {
     public class BaseMySql
     {
-        public string Server { get; set; } = "localhost";
+        public string Server { get; set; } = "mysql";
         public string Database { get; set; } = "proyectobbdd";
         public string Port { get; set; } = "3306";
-        public string Username { get; set; } = "root";
+        public string Username { get; set; } = "sa";
         public string Password { get; set; } = "proyecto";
 
         private MySqlConnection _connection;
