@@ -21,7 +21,7 @@ namespace backendBaseDatos.Controllers
             DDBBGet = ddbbget;
         }
 
-        [HttpPost("carnetsalud")]
+        [HttpPost("cargarcarnetsalud")]
         [SwaggerResponse(StatusCodes.Status200OK, Description ="Carnet de Salud subido/actualizado")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Description ="La informacion proporcionada no es correcta.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description ="El token provisto no es valido.")]
@@ -44,7 +44,7 @@ namespace backendBaseDatos.Controllers
                 {
                     return StatusCode(500, new Error(500, ex.Message));
                 }
-                return Ok("El carnet se creo con exito");
+                return Ok("El carnet se creo con éxito");
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace backendBaseDatos.Controllers
                 var cs = DDBBGet.GetCarnetSaludByCI(ci);
                 if (cs != null)
                 {
-                    return StatusCode(200, cs);
+                    return StatusCode(200, new { Ci= cs.Ci, Fecha_Emision = cs.Fecha_Emision, Fecha_Vencimiento= cs.Fecha_Vencimiento});
                 }
                 else
                 {
@@ -82,6 +82,36 @@ namespace backendBaseDatos.Controllers
                 return StatusCode(500, new Error(500, e.Message));
             }
         }
+
+
+        [HttpGet("imagencarnet/{ci}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Carnet de Salud")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "La informacion proporcionada no es correcta.")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
+        [Authorize]
+        public IActionResult ObtenerImagen(string ci)
+        {
+            try
+            {
+                var res = CI_Validate.IsCIValid(ci);
+                if(!res)
+                {
+                    return StatusCode(400, new Error(400, "La cédula no es correcta el digito verificador no es válido."));
+                }
+                var response = DDBBGet.GetFoto(ci);
+                if(string.IsNullOrEmpty(response))
+                {
+                    return StatusCode(500, new Error(500, "No se pudo recuperar la imagen."));
+                }
+                return StatusCode(200, response);
+
+            }catch(Exception e)
+            {
+                return StatusCode(500, new Error(500, e.Message));
+            }
+        }
+
 
     }
 }

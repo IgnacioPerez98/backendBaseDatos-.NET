@@ -58,6 +58,7 @@ namespace backendBaseDatos
             // Add services to the container.
             builder.Services.AddTransient(typeof(MySQLInsert));
             builder.Services.AddTransient(typeof(MySQLGet));
+            builder.Services.AddTransient(typeof(MySQLUpdate));
 
             //Web Socket
             builder.Services.AddSignalR();

@@ -9,13 +9,15 @@ namespace backendBaseDatos.Servicios
         public static string SecretKey = "5b8dabee936e7e1d74539e001a52b859d514355488b523d3084a5f6945a05035e54e0f3ee93afcf3d6fcbca393418df8a1d56bb2ac860b7c170bcec68a869235";
         private static readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(SecretKey));
 
-        public static JwtSecurityToken GenerateToken(string email,string role,string name)
+        public static JwtSecurityToken GenerateToken(string email,string role,string name,string ci,string Id)
         {
             var claims = new[]
             {
                 new Claim("email", email),
                 new Claim("rol",role),
-                new Claim("nombre", name)
+                new Claim("nombre", name),
+                new Claim("ci", ci),
+                new Claim("id",Id)
             };
 
             var token = new JwtSecurityToken(
@@ -37,5 +39,17 @@ namespace backendBaseDatos.Servicios
             }
             return "";
         } 
+
+        public static string ClaimFromToken(string token,string claim) 
+        {
+            var tokenManager = new JwtSecurityTokenHandler();
+            var claims = tokenManager.ReadToken(token) as JwtSecurityToken;
+            if (claims != null)
+            {
+                return claims.Payload[claim].ToString();
+            }
+            return "";
+
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace backendBaseDatos.Servicios.Validaciones
         /// </summary>
         /// <param name="funcionarios"></param>
         /// <returns></returns>
-        public static ValidateStatus ValidarFuncionario(Funcionarios funcionarios)
+        public static ValidateStatus ValidarFuncionario(Funcionarios funcionarios, string token)
         {
             ValidateStatus estado = new();
             if(funcionarios == null) { return new(false,"El funcionario esta vacio."); }
@@ -30,6 +30,8 @@ namespace backendBaseDatos.Servicios.Validaciones
             if(string.IsNullOrEmpty(funcionarios.Email)) { return new(false,"El e-mail es requerido."); }
             if(IsValidEmail(funcionarios.Email)== false) { return new(false, "El e-mail no es valido."); }
             if(string.IsNullOrEmpty (funcionarios.Password)) { return new(false, "La contraseña esta vacia."); }
+            if (funcionarios.EsAdmin == null) return new(false, "Debe especificar un rol, no puede ser nulo.");
+            if (JWTService.ClaimFromToken(token, "rol") == "funcionario" && (bool)funcionarios.EsAdmin) return new(false, "Solo los administradores, puede registrar nuevos administradores.");
             //el Log id no lo valido xq es autogenerado
             return estado;
         }

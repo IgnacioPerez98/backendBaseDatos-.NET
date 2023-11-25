@@ -3,6 +3,7 @@ using backendBaseDatos.Models.Requests;
 using backendBaseDatos.Models.Responses;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using System.Net;
 using System.Reflection.PortableExecutable;
 
 namespace backendBaseDatos.Servicios.MySQL
@@ -11,7 +12,7 @@ namespace backendBaseDatos.Servicios.MySQL
     {
         public UserDataForToken ObtenerPorEmail(string email)
         {
-            string query = @"SELECT F.email, L.password,F.esadmin, F.nombre
+            string query = @"SELECT F.email, L.password,F.esadmin, F.nombre, F.ci,F.logid
                         FROM funcionarios F join logins L on F.logid = L.logid
                         WHERE F.email = @email_param
                         ";
@@ -30,6 +31,8 @@ namespace backendBaseDatos.Servicios.MySQL
                             Password = reader.GetString(1),
                             EsAdmin = reader.GetBoolean(2),
                             Nombre = reader.GetString(3),
+                            Ci = reader.GetString(4),
+                            Id = reader.GetInt32(5).ToString(),
                         };
                     }
                     cmd.Connection.Close();
@@ -160,10 +163,10 @@ namespace backendBaseDatos.Servicios.MySQL
         public Carnet_Salud GetCarnetSaludByCI(string ci)
         {
             string query = @"SELECT json_object(
-	            'ci',ci,
-                'fch_emision', fch_emision,
-                'fch_vencimiento', fch_vencimiento,
-                'comprobante', comprobante
+	            'Ci',ci,
+                'Fecha_Emision', fch_emision,
+                'Fecha_Vencimiento', fch_vencimiento,
+                'Image', null
             ) FROM carnet_salud where ci = @ci;";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
@@ -181,6 +184,28 @@ namespace backendBaseDatos.Servicios.MySQL
                 cmd.Connection.Close();
             }
             throw new Exception("No se puedo encontrar el Carnet de Salud");
+        }
+
+        public string GetFoto(string ci)
+        {
+            string query = "SELECT comprobante FROM carnet_salud where ci = @cedula";
+            using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
+            {
+                cmd.Connection.Open();
+                cmd.Parameters.AddWithValue("@cedula", ci);
+                var reader = cmd.ExecuteReader(System.Data.CommandBehavior.SequentialAccess);
+                if (reader.Read())
+                {
+                    var memoryStream = new MemoryStream();
+                    var stream = reader.GetStream(0);
+                    stream.CopyTo(memoryStream);
+
+                    // Convert the image to a Base64 string
+                    return Convert.ToBase64String(memoryStream.ToArray());
+
+                }
+            }
+            throw new Exception("No se puedo recuperar la imagen solicitada");
         }
     }
 }

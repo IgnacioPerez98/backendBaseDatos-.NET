@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace backendBaseDatos.Controllers
 {
-    [Route("api/carnetsalud")]
+    [Route("api/clinica")]
     [ApiController]
     public class ClinicaUCUController : ControllerBase
     {
@@ -111,10 +111,17 @@ namespace backendBaseDatos.Controllers
         }
 
         [HttpGet("periodos")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Turno reservado exitosamente")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "La informacion proporcionada no es correcta.")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "El token provisto no es valido.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Excepción del servidor.")]
+        [Authorize] 
         public ActionResult ObtenerPeriodos()
         {
             try
             {
+                var periodos = DDBBGet.GetPeriodos();
+                return StatusCode(200, periodos);
             }
             catch (Exception ex)
             {
