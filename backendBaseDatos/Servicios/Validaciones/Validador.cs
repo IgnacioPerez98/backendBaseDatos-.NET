@@ -7,14 +7,8 @@ namespace backendBaseDatos.Servicios.Validaciones
     {
         public static bool IsValidEmail(string email)
         {
-            // Define a regular expression for a simple email validation
-            string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
-
-            // Create a Regex object
-            Regex regex = new Regex(pattern);
-
-            // Use the IsMatch method to validate the email
-            return regex.IsMatch(email);
+            string patron = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            return Regex.IsMatch(email, patron);
         }
         /// <summary>
         /// Chequea que los campos del objeto funcionario que es requerido en la base de datos no sea nulo.
