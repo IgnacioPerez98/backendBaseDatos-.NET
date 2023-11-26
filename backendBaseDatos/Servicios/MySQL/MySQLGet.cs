@@ -139,7 +139,7 @@ namespace backendBaseDatos.Servicios.MySQL
                             (
 	                            JSON_OBJECT(
 		                            'Anio' ,anio,
-                                    'Semesttre', semestre,
+                                    'Semestre', semestre,
                                     'Fch_Inicio',fch_inicio,
                                     'Fch_Fin', fch_fin
                                 )
