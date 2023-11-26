@@ -31,7 +31,7 @@ namespace backendBaseDatos.Servicios.Validaciones
             if(IsValidEmail(funcionarios.Email)== false) { return new(false, "El e-mail no es valido."); }
             if(string.IsNullOrEmpty (funcionarios.Password)) { return new(false, "La contraseña esta vacia."); }
             if (funcionarios.EsAdmin == null) return new(false, "Debe especificar un rol, no puede ser nulo.");
-            if (JWTService.ClaimFromToken(token, "rol") == "funcionario" && (bool)funcionarios.EsAdmin) return new(false, "Solo los administradores, puede registrar nuevos administradores.");
+            if ((bool)funcionarios.EsAdmin && JWTService.ClaimFromToken(token, "rol") == "funcionario" ) return new(false, "Solo los administradores, puede registrar nuevos administradores.");
             //el Log id no lo valido xq es autogenerado
             return estado;
         }
@@ -71,6 +71,7 @@ namespace backendBaseDatos.Servicios.Validaciones
         public static ValidateStatus ValidarTurno(Agenda turno)
         {
             ValidateStatus estado = new();
+
             if (turno == null) return new(false, "El turno provisto no es válido.");
             if (turno.Fecha_Agenda == null) return new(false, "La hora de inicio es requerida");
             return estado;

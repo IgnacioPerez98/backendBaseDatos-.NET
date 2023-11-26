@@ -76,7 +76,17 @@ namespace backendBaseDatos
 
             app.UseAuthorization();
 
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(
+                options => options.WithOrigins(
+                    "http://localhost:4200",
+                    "https://localhost:4200",
+                    "http://localhost:8080",
+                    "http://localhost:8000",
+                    "http://localhost:8800",
+                    "https://localhost:8080", 
+                    "https://localhost:8000",
+                    "https://localhost:8800"
+                ).AllowAnyHeader().AllowAnyMethod());
 
             app.MapControllers();
 

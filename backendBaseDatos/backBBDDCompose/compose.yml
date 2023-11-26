@@ -3,7 +3,14 @@
 
 
 version: '3.8'
-services:
+services: 
+  webapi:
+    build:
+      context: ../
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
   mysql:
     container_name: "MySQLBasedeDatos"
     image: mysql:latest
@@ -15,3 +22,7 @@ services:
       MYSQL_DATABASE: proyectobbdd
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  mynetwork:
+    driver: bridge

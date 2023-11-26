@@ -20,7 +20,6 @@ namespace backendBaseDatos.Servicios.MySQL
             {
                 using(MySqlCommand cmd = new MySqlCommand(query,getConection()))
                 {
-                    cmd.Connection.Open();
                     cmd.Parameters.AddWithValue("@email_param", email);
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -42,6 +41,10 @@ namespace backendBaseDatos.Servicios.MySQL
             {
                 Console.WriteLine(ex);
             }
+            finally
+            {
+                getConection().Close();
+            }
             return null;
         } 
 
@@ -59,7 +62,6 @@ namespace backendBaseDatos.Servicios.MySQL
                     ";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
-                cmd.Connection.Open();
                 var reader = cmd.ExecuteReader();
                 bool flag = true;
                 while (reader.Read())
@@ -67,7 +69,7 @@ namespace backendBaseDatos.Servicios.MySQL
                     flag = false;
                     lista = JsonConvert.DeserializeObject<List<FuncionarioPendiente>>(reader.GetString(0));
                 }
-                cmd.Connection.Close();
+                getConection().Close();
                 if (flag)
                 {
                     throw new Exception("No se puedo leer los registros.");
@@ -90,7 +92,6 @@ namespace backendBaseDatos.Servicios.MySQL
                 ) FROM periodos_actualizacion P WHERE P.fch_inicio = @fchinicio and P.fch_fin = @fchfin";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
-                cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@fchinicio", start);
                 cmd.Parameters.AddWithValue("@fchfin", finilize);
                 var reader = cmd.ExecuteReader();
@@ -101,7 +102,7 @@ namespace backendBaseDatos.Servicios.MySQL
                         period = JsonConvert.DeserializeObject<PeriodoActualizacion>(reader.GetString(0));
                     }
                 }
-                cmd.Connection.Close();
+                getConection().Close();
             }
             return period;
         }
@@ -117,7 +118,6 @@ namespace backendBaseDatos.Servicios.MySQL
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
                 List<Agenda> agendas = new List<Agenda>();
-                cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@inicio", p.Fch_Inicio);
                 cmd.Parameters.AddWithValue("@final", p.Fch_Fin);
                 var reader = cmd.ExecuteReader();
@@ -128,13 +128,13 @@ namespace backendBaseDatos.Servicios.MySQL
                         agendas = JsonConvert.DeserializeObject<List<Agenda>>(reader.GetString(0));
                     }
                 }
-
-                cmd.Connection.Close();
+                getConection().Close();
                 return agendas;
             }
         }
         public List<Periodos> GetPeriodos()
         {
+            List<Periodos> variable = new List<Periodos>();
             string query = @"SELECT JSON_ARRAY
                             (
 	                            JSON_OBJECT(
@@ -146,18 +146,18 @@ namespace backendBaseDatos.Servicios.MySQL
                             ) FROM periodos_actualizacion;";
             using(MySqlCommand cmd = new MySqlCommand( query, getConection()))
             {
-                cmd.Connection.Open();
                 var reader =cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     if (!reader.IsDBNull(0))
                     {
-                        return JsonConvert.DeserializeObject<List<Periodos>>(reader.GetString(0));
+                        variable = JsonConvert.DeserializeObject<List<Periodos>>(reader.GetString(0));
                     }
                 }   
-                cmd.Connection.Close();
             }
-            return new List<Periodos>();
+
+            getConection().Close();
+            return variable;
 
         }
         public Carnet_Salud GetCarnetSaludByCI(string ci)
@@ -170,19 +170,19 @@ namespace backendBaseDatos.Servicios.MySQL
             ) FROM carnet_salud where ci = @ci;";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
-                cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@ci", ci);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     if (!reader.IsDBNull(0))
                     {
-                        return JsonConvert.DeserializeObject<Carnet_Salud>(reader.GetString(0));
+                        var variable = JsonConvert.DeserializeObject<Carnet_Salud>(reader.GetString(0));
+                        getConection().Close();
+                        return variable;
                     }
                 }
-                
-                cmd.Connection.Close();
             }
+            getConection().Close();
             throw new Exception("No se puedo encontrar el Carnet de Salud");
         }
 
@@ -191,7 +191,6 @@ namespace backendBaseDatos.Servicios.MySQL
             string query = "SELECT comprobante FROM carnet_salud where ci = @cedula";
             using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
-                cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@cedula", ci);
                 var reader = cmd.ExecuteReader(System.Data.CommandBehavior.SequentialAccess);
                 if (reader.Read())
@@ -201,10 +200,13 @@ namespace backendBaseDatos.Servicios.MySQL
                     stream.CopyTo(memoryStream);
 
                     // Convert the image to a Base64 string
-                    return Convert.ToBase64String(memoryStream.ToArray());
+                    var foto = Convert.ToBase64String(memoryStream.ToArray());
+                    getConection().Close();
+                    return foto;
 
                 }
             }
+            getConection().Close();
             throw new Exception("No se puedo recuperar la imagen solicitada");
         }
     }

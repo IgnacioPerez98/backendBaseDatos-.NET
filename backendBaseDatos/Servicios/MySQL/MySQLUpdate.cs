@@ -24,9 +24,7 @@ namespace backendBaseDatos.Servicios.MySQL
                 {   
                     cmd.CommandText = query.Substring(0, query.Length - 1)+ " where logid = @logid";
                     cmd.Parameters.AddWithValue("@logid", logID);
-                    await cmd.Connection.OpenAsync();
                     await cmd.ExecuteNonQueryAsync();
-                    await cmd.Connection.CloseAsync();
                 }
             }
             query = @"UPDATE logins SET  ";
@@ -44,9 +42,7 @@ namespace backendBaseDatos.Servicios.MySQL
                 {
                     cmd.CommandText = query.Substring(0, query.Length - 1);
                     cmd.Parameters.AddWithValue("@logid", logID);
-                    await cmd.Connection.OpenAsync();
                     await cmd.ExecuteNonQueryAsync();
-                    await cmd.Connection.CloseAsync();
                 }
 
             }
