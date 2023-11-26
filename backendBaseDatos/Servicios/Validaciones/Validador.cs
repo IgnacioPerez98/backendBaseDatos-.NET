@@ -71,6 +71,7 @@ namespace backendBaseDatos.Servicios.Validaciones
         public static ValidateStatus ValidarTurno(Agenda turno)
         {
             ValidateStatus estado = new();
+
             if (turno == null) return new(false, "El turno provisto no es válido.");
             if (turno.Fecha_Agenda == null) return new(false, "La hora de inicio es requerida");
             return estado;

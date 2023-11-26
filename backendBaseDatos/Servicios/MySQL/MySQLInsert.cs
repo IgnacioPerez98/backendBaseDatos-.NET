@@ -10,8 +10,6 @@ namespace backendBaseDatos.Servicios.MySQL
         {
             using (MySqlConnection connection = getConection())
             {
-                connection.Open();
-
                 using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
                     try
@@ -65,7 +63,7 @@ namespace backendBaseDatos.Servicios.MySQL
                     }
                     finally
                     {
-                        connection.Close();
+                        getConection().Close();
                     }
                 }
             }
@@ -81,14 +79,12 @@ namespace backendBaseDatos.Servicios.MySQL
                     ";
             using( MySqlCommand cmd = new MySqlCommand( query,getConection()))
             {
-                cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@ci",carnet.Ci);
                 cmd.Parameters.AddWithValue("@fch_emi",carnet.Fecha_Emision);
                 cmd.Parameters.AddWithValue("@fch_venc",carnet.Fecha_Vencimiento);
                 cmd.Parameters.Add("@comprobante", MySqlDbType.Blob).Value = carnet.Image;
                 int rowAffected = cmd.ExecuteNonQuery();
                 if (rowAffected == 0) throw new Exception("No se efectuaron cambios en la base de datos.");
-                cmd.Connection.Close();
             }
         }
         public void CrearPeriodo(PeriodoActualizacion periodo)
@@ -97,17 +93,16 @@ namespace backendBaseDatos.Servicios.MySQL
                     anio, semestre, fch_inicio, fch_fin) VALUES ( @anio, @semestre, @fch_inicio, @fch_fin)";
             using(MySqlCommand cmd = new MySqlCommand(query, getConection()))
             {
-                cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@anio",periodo.Anio);
                 cmd.Parameters.AddWithValue("@semestre", periodo.Semestre);
                 cmd.Parameters.AddWithValue("@fch_inicio", periodo.Fch_Inicio);
                 cmd.Parameters.AddWithValue("@fch_fin", periodo.Fch_Fin);
                 var affRows = cmd.ExecuteNonQuery();
-                cmd.Connection.Close();
                 if(affRows == 0)
                 {
                     throw new Exception("No se afectaron filas.");
                 }
+                getConection().Close();
             }
         }
         public void CargarNumeroAgenda(Agenda agenda)
@@ -117,16 +112,13 @@ namespace backendBaseDatos.Servicios.MySQL
                 ";
             using (MySqlCommand cmd = new MySqlCommand(query,getConection()))
             {
-                cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@nro", agenda.Numero);
                 cmd.Parameters.AddWithValue("@ci", agenda.Ci);
                 cmd.Parameters.AddWithValue("@fch_agenda", agenda.Fecha_Agenda);
                 cmd.Parameters.AddWithValue("@estareservado", agenda.EstaReservado);
                 var response = cmd.ExecuteNonQuery();
                 if (response == 0) throw new Exception("No se pudo modificar el registro en la base de datos");
-                
-                cmd.Connection.Close();
-                
+                getConection().Close();
             }
         }
     }

@@ -89,6 +89,12 @@ namespace backendBaseDatos.Controllers
                 {
                     return StatusCode(400, new Error(400,"La CI proporcionada no es válida, no verifica el dígito de validación." ));
                 }
+                if(!(toDatetime(inicioperiodo) <= turno.Fecha_Agenda && turno.Fecha_Agenda <= toDatetime(finperiodo)))
+                {
+
+                    return StatusCode(400, new Error(400, "La fecha no es valida, porque no esta en el periodo"));
+                }
+
                 var periodoActualizacion = DDBBGet.ObtenerPeriodoPorPK(inicioperiodo, finperiodo);
                 if(!(periodoActualizacion.Fch_Inicio <= turno.Fecha_Agenda && turno.Fecha_Agenda <= periodoActualizacion.Fch_Fin))
                 {
@@ -127,6 +133,13 @@ namespace backendBaseDatos.Controllers
             {
                 return StatusCode(500, new Error(500, ex.Message));
             }
+        }
+
+
+
+        private DateTime toDatetime(DateOnly d)
+        {
+            return new DateTime(d.Year, d.Month, d.Day);
         }
     }
 }

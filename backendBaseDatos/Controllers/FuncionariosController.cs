@@ -61,14 +61,14 @@ namespace backendBaseDatos.Controllers
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Error en el token proporcionado")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
         [Authorize]
-        public ActionResult ActualizarFuncionario([FromBody] FuncionarioUpdate func)
+        public async Task<ActionResult> ActualizarFuncionario([FromBody] FuncionarioUpdate func)
         {
             try
             {
                 var logId = JWTService.ClaimFromToken(Request.Headers.Authorization.ToString().Split(" ")[1], "id");
                 if (string.IsNullOrEmpty(logId)) return StatusCode(500, new Error(500, "No se pudo recuperar el id del funcionario."));
                 //El func no se valida porque lo hace la consulta
-                DDBBUpdate.ActualizarFuncionario(func, logId);
+                await DDBBUpdate.ActualizarFuncionario(func, logId);
                 return StatusCode(200, "Funcionario actualizado con exito.");
                 
             }
