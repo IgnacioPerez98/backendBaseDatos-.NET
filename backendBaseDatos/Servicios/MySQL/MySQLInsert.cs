@@ -17,8 +17,10 @@ namespace backendBaseDatos.Servicios.MySQL
                     try
                     {
                         // Insertar en la tabla logins
-                        string queryLogin = @"
-                    INSERT INTO logins (logid, password) VALUES ((SELECT COALESCE(MAX(logid),0)+1), @password);";
+                        string queryLogin = @"INSERT INTO logins (logid, password)
+                                            SELECT COALESCE(MAX(logid) + 1, 0),@password
+                                            FROM logins;
+                                            ";
 
                         using (MySqlCommand cmdLogin = new MySqlCommand(queryLogin, connection, transaction))
                         {
