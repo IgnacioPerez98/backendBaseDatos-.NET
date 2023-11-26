@@ -68,7 +68,7 @@ namespace backendBaseDatos.Controllers
                 var logId = JWTService.ClaimFromToken(Request.Headers.Authorization.ToString().Split(" ")[1], "id");
                 if (string.IsNullOrEmpty(logId)) return StatusCode(500, new Error(500, "No se pudo recuperar el id del funcionario."));
                 //El func no se valida porque lo hace la consulta
-                await DDBBUpdate.ActualizarFuncionario(func, logId);
+                DDBBUpdate.ActualizarFuncionario(func, logId);
                 return StatusCode(200, "Funcionario actualizado con exito.");
                 
             }

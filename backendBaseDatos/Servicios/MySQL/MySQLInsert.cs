@@ -61,10 +61,6 @@ namespace backendBaseDatos.Servicios.MySQL
                         transaction.Rollback();
                         throw new Exception(ex.Message);
                     }
-                    finally
-                    {
-                        getConection().Close();
-                    }
                 }
             }
         }
