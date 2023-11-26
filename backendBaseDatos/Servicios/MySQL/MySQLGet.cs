@@ -14,8 +14,7 @@ namespace backendBaseDatos.Servicios.MySQL
         {
             string query = @"SELECT F.email, L.password,F.esadmin, F.nombre, F.ci,F.logid
                         FROM funcionarios F join logins L on F.logid = L.logid
-                        WHERE F.email = @email_param
-                        ";
+                        WHERE F.email = @email_param ;";
             try
             {
                 using(MySqlCommand cmd = new MySqlCommand(query,getConection()))
@@ -139,7 +138,7 @@ namespace backendBaseDatos.Servicios.MySQL
                             (
 	                            JSON_OBJECT(
 		                            'Anio' ,anio,
-                                    'Semesttre', semestre,
+                                    'Semestre', semestre,
                                     'Fch_Inicio',fch_inicio,
                                     'Fch_Fin', fch_fin
                                 )
