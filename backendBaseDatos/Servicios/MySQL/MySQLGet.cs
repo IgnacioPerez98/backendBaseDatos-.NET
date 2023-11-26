@@ -14,8 +14,7 @@ namespace backendBaseDatos.Servicios.MySQL
         {
             string query = @"SELECT F.email, L.password,F.esadmin, F.nombre, F.ci,F.logid
                         FROM funcionarios F join logins L on F.logid = L.logid
-                        WHERE F.email = @email_param
-                        ";
+                        WHERE F.email = @email_param ;";
             try
             {
                 using(MySqlCommand cmd = new MySqlCommand(query,getConection()))
