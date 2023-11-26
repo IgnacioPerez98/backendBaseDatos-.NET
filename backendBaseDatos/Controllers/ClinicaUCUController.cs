@@ -72,6 +72,10 @@ namespace backendBaseDatos.Controllers
         {
             try
             {
+                if(finperiodo > DateOnly.FromDateTime(DateTime.Now))
+                {
+                    return StatusCode(400, new Error(400, "No se pueden reservar turnos, para periodos cerrados."));
+                }
                 var turnoState = Validador.ValidarTurno(turno);
                 if (!turnoState.IsOK)
                 {
