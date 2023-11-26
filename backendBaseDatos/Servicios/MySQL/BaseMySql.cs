@@ -29,10 +29,7 @@ namespace backendBaseDatos.Servicios.MySQL
                     MaximumPoolSize = 100
                     
                 }.ToString();
-                if (_connection == null )
-                {
-                    _connection = new MySqlConnection(connectionString);
-                }
+                _connection = new MySqlConnection(connectionString);
 
                 if (_connection.State != ConnectionState.Open)
                 {
