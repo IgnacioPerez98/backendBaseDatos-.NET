@@ -10,6 +10,46 @@ namespace backendBaseDatos.Servicios.MySQL
 {
     public class MySQLGet : BaseMySql
     {
+
+        public Funcionarios GetFuncionarios(string ci)
+        {
+            string query = @"SELECT json_object(
+	                    'Ci', F.ci,
+                        'Nombre', F.nombre,
+                        'Apellido', F.apellido ,
+                        'Fch_Nac', F.fch_nac ,
+                        'Direccion', F.direccion ,
+                        'Telefono', F.telefono ,
+                        'Email', F.email  ,
+                        'Password', L.password ,
+                        'EsAdmin', F.esadmin 
+                    )
+                    FROM funcionarios F join logins L on F.logid = L.logid
+                    WHERE F.ci = @ci ;";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
+                {
+                    cmd.Parameters.AddWithValue("@ci", ci);
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        return JsonConvert.DeserializeObject<Funcionarios>(reader.GetString(0));
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                getConection().Close();
+            }
+            return null;
+        }
+
         public UserDataForToken ObtenerPorEmail(string email)
         {
             string query = @"SELECT F.email, L.password,F.esadmin, F.nombre, F.ci,F.logid
@@ -33,7 +73,6 @@ namespace backendBaseDatos.Servicios.MySQL
                             Id = reader.GetInt32(5).ToString(),
                         };
                     }
-                    cmd.Connection.Close();
                 }
             }
             catch (Exception ex )
