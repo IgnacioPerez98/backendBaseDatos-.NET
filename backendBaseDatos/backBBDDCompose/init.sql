@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS funcionarios(
     fch_nac date,
     direccion varchar(255),
     telefono varchar(45),
-    email varchar(255),
+    email varchar(255) unique,
     esadmin boolean default false,
     logid int unique not null,
     foreign key (logid) references logins(logid)

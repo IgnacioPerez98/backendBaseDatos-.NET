@@ -17,11 +17,43 @@ namespace backendBaseDatos.Controllers
         private readonly ILogger<FuncionariosController> _logger;
         private readonly MySQLInsert DDBBInsert;
         private readonly MySQLUpdate DDBBUpdate;
-        public FuncionariosController(ILogger<FuncionariosController> logger,MySQLInsert mySQLInsert, MySQLUpdate BBDDUpdate)
+        private readonly MySQLGet DDBBGet;
+        public FuncionariosController(ILogger<FuncionariosController> logger,MySQLInsert mySQLInsert, MySQLUpdate BBDDUpdate, MySQLGet mg)
         {
             _logger = logger;
             DDBBInsert = mySQLInsert;
             DDBBUpdate = BBDDUpdate;
+            DDBBGet = mg;
+        }
+
+        [HttpGet("funcionario")]
+        [SwaggerResponse(StatusCodes.Status200OK, Description = "Funcionario obtenido con exito.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, Description = "Error en la validacion del funcionario")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "Error en el token proporcionado")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "Error del servidor")]
+        [Authorize]
+        public ActionResult GetFuncionario()
+        {
+            try
+            {
+                string token = "";
+                string ci = "";
+                try
+                {
+                    token = this.Request.Headers.Authorization.ToString().Split(" ")[1];
+                    ci = JWTService.ClaimFromToken(token, "ci");
+                }
+                catch (Exception) {
+                    throw new Exception("El token provisto no es valido.");
+                }
+                return StatusCode(200, DDBBGet.GetFuncionarios(ci)) ;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear funcionario.");
+                return StatusCode(500, new Error(500, ex.Message));
+            }
+
         }
 
         [HttpPost("funcionario")]
