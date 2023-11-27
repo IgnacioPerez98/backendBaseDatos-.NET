@@ -95,6 +95,12 @@ namespace backendBaseDatos.Controllers
                     return StatusCode(400, new Error(400, "La fecha no es valida, porque no esta en el periodo"));
                 }
 
+                if(DDBBGet.TieneHora(turno.Ci, inicioperiodo, finperiodo))
+                {
+                    return StatusCode(400, new Error(400, "Ya cuenta con una hora para el periodo vigente."));
+                }
+
+
                 var periodoActualizacion = DDBBGet.ObtenerPeriodoPorPK(inicioperiodo, finperiodo);
                 if(!(periodoActualizacion.Fch_Inicio <= turno.Fecha_Agenda && turno.Fecha_Agenda <= periodoActualizacion.Fch_Fin))
                 {
