@@ -10,6 +10,39 @@ namespace backendBaseDatos.Servicios.MySQL
 {
     public class MySQLGet : BaseMySql
     {
+        public bool TieneHora(string ci, DateOnly i, DateOnly f)
+        {
+            string query = @"SELECT estareservado
+                            FROM agenda
+                            WHERE ci = @ci  and fch_agenda between @ini and @fin";
+            try
+            {
+                DateTime inicio = new DateTime(i.Year, i.Month, i.Day);
+                DateTime fin = new DateTime(f.Year,f.Month, f.Day);
+                using (MySqlCommand cmd = new MySqlCommand(query, getConection()))
+                {
+                    cmd.Parameters.AddWithValue("@ci", ci);
+                    cmd.Parameters.AddWithValue("@ini", inicio);
+                    cmd.Parameters.AddWithValue("@fin", fin);
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        return (reader.IsDBNull(0))? false : true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                getConection().Close();
+            }
+            return false;
+        }
+
+
 
         public Funcionarios GetFuncionarios(string ci)
         {
