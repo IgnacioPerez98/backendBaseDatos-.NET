@@ -173,9 +173,7 @@ namespace backendBaseDatos.Servicios.MySQL
         public List<Periodos> GetPeriodos()
         {
             List<Periodos> variable = new List<Periodos>();
-            string query = @"SELECT JSON_ARRAY
-                            (
-	                            JSON_OBJECT(
+            string query = @"SELECT json_arrayagg(JSON_OBJECT(
 		                            'Anio' ,anio,
                                     'Semestre', semestre,
                                     'Fch_Inicio',fch_inicio,
